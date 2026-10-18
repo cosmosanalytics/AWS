@@ -859,12 +859,18 @@
       const f = inputEl.files && inputEl.files[0];
       if (!f) return;
       document.getElementById("pushFileName").value = f.name;
+      const isImgOrBin = !(/\.(md|txt|csv|tsv|json|yaml|yml|html|css|js|py|sh|sql)$/i.test(f.name));
       const reader = new FileReader();
       reader.onload = (e) => {
-        document.getElementById("pushFileContent").value = String(e.target.result || "").slice(0, 8000);
-        appendLog(`[FILE LOADED] Ready to push "${f.name}" (${f.size} bytes) to GitHub via AWS Lambda.`);
+        const val = String(e.target.result || "");
+        document.getElementById("pushFileContent").value = val;
+        appendLog(`[FILE LOADED] Ready to push "${f.name}" (${f.size.toLocaleString()} bytes, mode: ${isImgOrBin ? 'Base64 Binary' : 'UTF-8 Text'}) to GitHub via AWS Lambda.`);
       };
-      reader.readAsText(f);
+      if (isImgOrBin) {
+        reader.readAsDataURL(f);
+      } else {
+        reader.readAsText(f);
+      }
     };
 
     // Execute any of the 9 individual tests
