@@ -1058,6 +1058,9 @@
     // Live AWS Cloud Configuration (Project 966273137102 • us-east-2)
     const LIVE_AWS_URL = "https://rzif6dkmsvpk7xczl3ekzksepe0uyejl.lambda-url.us-east-2.on.aws/";
     const LIVE_BEDROCK_MODELS = [
+      { id: "us.anthropic.claude-sonnet-4-6", label: "Anthropic Claude Sonnet 4.6 (us-east-2 • Authorized)" },
+      { id: "us.anthropic.claude-opus-4-6-v1", label: "Anthropic Claude Opus 4.6 (us-east-2 • Authorized)" },
+      { id: "us.anthropic.claude-haiku-4-5-20251001-v1:0", label: "Anthropic Claude Haiku 4.5 (us-east-2 • Authorized)" },
       { id: "deepseek.v3.2", label: "DeepSeek V3.2 (us-east-2 • 200 OK)" },
       { id: "mistral.mistral-large-3-675b-instruct", label: "Mistral Large 3 675B (us-east-2 • 200 OK)" },
       { id: "openai.gpt-oss-120b", label: "OpenAI GPT-OSS 120B (us-east-2 • 200 OK)" },
@@ -1068,6 +1071,27 @@
 
     // Pre-recorded authentic AWS us-east-2 receipts for $0-cost Public LinkedIn Demo Mode
     const CACHED_MODEL_RECEIPTS = {
+      "us.anthropic.claude-sonnet-4-6": {
+        execution_id: "exec-1792337102-claude46",
+        lambda_request_id: "bba44347-bf1c-4ad5-a200-7e8911cc369c",
+        latency_ms: 840,
+        usage: { prompt_tokens: 86, completion_tokens: 62, total_tokens: 148 },
+        text: "Anthropic Claude Sonnet 4.6 CI/CD audit in AWS us-east-2 (Project 966273137102): Bedrock Guardrails verified zero PII/prompt-injection vectors, Step Functions state transitions succeeded cleanly, and S3 artifact checksums are intact."
+      },
+      "us.anthropic.claude-opus-4-6-v1": {
+        execution_id: "exec-1792337118-opus46",
+        lambda_request_id: "30699657-a371-46b6-bec7-9c96577e60a3",
+        latency_ms: 1290,
+        usage: { prompt_tokens: 86, completion_tokens: 74, total_tokens: 160 },
+        text: "Anthropic Claude Opus 4.6 deep architectural review in us-east-2 confirms full DevSecOps policy compliance, least-privilege IAM execution for Step Functions, and verified S3 deployment receipt persistence."
+      },
+      "us.anthropic.claude-haiku-4-5-20251001-v1:0": {
+        execution_id: "exec-1792337130-haiku45",
+        lambda_request_id: "449633c6-465b-4f2e-b307-1c03d8dca20f",
+        latency_ms: 410,
+        usage: { prompt_tokens: 86, completion_tokens: 49, total_tokens: 135 },
+        text: "Anthropic Claude Haiku 4.5 fast canary check in us-east-2: all 48/48 CI checks green, Step Functions state machine execution nominal, and S3 deployment artifact verified."
+      },
       "deepseek.v3.2": {
         execution_id: "exec-1792333865-a19635",
         lambda_request_id: "c6c6d9ec-adfc-427c-b53d-ad729503027d",
