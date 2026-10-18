@@ -414,11 +414,18 @@
       <div class="test-grid-2">
         <div class="test-card" id="tc1">
           <div class="tc-top">
-            <span>🚀 Test 1: <code>git push origin main</code></span>
-            <button class="btn btn-blue" onclick="runTest(1)">▶️ Test Push</button>
+            <span>🚀 Test 1: <code>git push origin main</code> (Push File via Lambda)</span>
+            <button class="btn btn-blue" onclick="runTest(1)">▶️ Push File to GitHub</button>
           </div>
-          <div class="tc-desc">Direct express-lane upload from laptop to <code>main</code> & <code>gh-pages</code> without waiting for PR review.</div>
-          <div class="tc-result" id="res1">Ready to test direct commit upload...</div>
+          <div class="tc-desc">Push any file & content straight into <code>cosmosanalytics/AWS</code> (<code>main</code> & <code>gh-pages</code>) via AWS Lambda SSH:</div>
+          <div style="display:flex; gap:5px; flex-wrap:wrap; margin:2px 0;">
+            <input type="text" id="pushFileName" value="live_push_receipt.json" placeholder="Filename (e.g. my_note.md)" style="flex:1; min-width:130px; font-size:10px; padding:4px 6px;">
+            <label class="btn btn-secondary" style="font-size:9.5px; padding:3px 7px; cursor:pointer;">
+              📂 Pick File <input type="file" id="pushFilePicker" style="display:none;" onchange="onPickLocalFile(this)">
+            </label>
+          </div>
+          <input type="text" id="pushFileContent" value="Hello from AWS Lambda us-east-2! Pushed live to GitHub." placeholder="Type file content or custom message..." style="width:100%; font-size:10px; padding:4px 6px; margin-bottom:2px;">
+          <div class="tc-result" id="res1">Ready to push file to GitHub...</div>
         </div>
 
         <div class="test-card" id="tc2">
@@ -848,6 +855,18 @@
       document.getElementById("aiExplanationBox").innerHTML = explanationHtml;
     }
 
+    window.onPickLocalFile = (inputEl) => {
+      const f = inputEl.files && inputEl.files[0];
+      if (!f) return;
+      document.getElementById("pushFileName").value = f.name;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        document.getElementById("pushFileContent").value = String(e.target.result || "").slice(0, 8000);
+        appendLog(`[FILE LOADED] Ready to push "${f.name}" (${f.size} bytes) to GitHub via AWS Lambda.`);
+      };
+      reader.readAsText(f);
+    };
+
     // Execute any of the 9 individual tests
     window.runTest = async (idx) => {
       lastTestIndex = idx;
@@ -861,48 +880,53 @@
       // TEST 1: git push origin main
       if (idx === 1) {
         activeHighlightStage = 2;
-        spawnPackets(0, 1, "#0284C7", "git push main");
-        document.getElementById("hudCenter").textContent = "Flow: Laptop / Lambda ➔ GitHub Repo (Direct Push)";
+        const customName = (document.getElementById("pushFileName")?.value || "live_push_receipt.json").trim();
+        const customContent = (document.getElementById("pushFileContent")?.value || "").trim();
+        spawnPackets(0, 1, "#0284C7", `push ${customName}`);
+        document.getElementById("hudCenter").textContent = `Flow: AWS Lambda ➔ GitHub Repo (Pushing ${customName})`;
         if (isLive) {
-          document.getElementById("res1").textContent = "⏳ Pushing real commit (live_push_receipt.json) to GitHub main...";
-          appendLog("[TEST 1 LIVE] Executing real git push over SSH to cosmosanalytics/AWS (main & gh-pages)...");
+          document.getElementById("res1").textContent = `⏳ Pushing "${customName}" to GitHub main via AWS Lambda...`;
+          appendLog(`[TEST 1 LIVE] Pushing file "${customName}" over SSH from AWS Lambda to cosmosanalytics/AWS...`);
           const resp = await fetch(LIVE_AWS_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Cosmos-Key": ownerPasscode },
             body: JSON.stringify({
               action: "git_push",
+              file_name: customName,
+              file_content: customContent,
               model: document.getElementById("bedrockModelSelect").value,
-              note: "Triggered from Owner Live Bridge Test Lab (Test 1: git push origin main)"
+              note: customContent || "Triggered from Owner Live Bridge Test Lab (Test 1: git push origin main)"
             })
           });
           const data = await resp.json();
           const pr = data.push_result || {};
           const sha = pr.short_sha || "HEAD";
           const parentSha = pr.parent_sha || "prev";
+          const pushedFile = pr.pushed_file || customName;
           const commitUrl = pr.commit_url || "https://github.com/cosmosanalytics/AWS/commits/main";
-          const fileUrl = pr.file_url || "https://github.com/cosmosanalytics/AWS/blob/main/live_push_receipt.json";
+          const fileUrl = pr.file_url || `https://github.com/cosmosanalytics/AWS/blob/main/${pushedFile}`;
           document.getElementById("inspCommitSha").textContent = `#${sha} (NEW LIVE PUSH)`;
-          lastTestContext = `Test 1 (REAL git push origin main): Created brand-new Commit #${sha} (parent #${parentSha}) updating live_push_receipt.json on cosmosanalytics/AWS.`;
+          lastTestContext = `Test 1 (REAL git push origin main): Created brand-new Commit #${sha} (parent #${parentSha}) pushing file "${pushedFile}" to cosmosanalytics/AWS.`;
           markTestPassed(
             1,
-            `<span>✅ REAL PUSH: <strong>#${sha}</strong> (was #${parentSha}) • <a href="${commitUrl}" target="_blank" style="color:var(--accent-blue);text-decoration:underline;">View Commit ↗</a> • <a href="${fileUrl}" target="_blank" style="color:var(--accent-green);text-decoration:underline;">live_push_receipt.json ↗</a></span>`,
+            `<span>✅ REAL PUSH: <strong>#${sha}</strong> • <a href="${commitUrl}" target="_blank" style="color:var(--accent-blue);text-decoration:underline;">View Commit ↗</a> • <a href="${fileUrl}" target="_blank" style="color:var(--accent-green);text-decoration:underline;">${pushedFile} ↗</a></span>`,
             `
-            <strong>🚀 Test 1 Passed (${modeLabel}): REAL <code>git push origin main</code> Executed!</strong><br>
-            • <strong>What Just Happened:</strong> AWS Lambda authenticated via Ed25519 SSH and pushed a <strong>brand-new commit</strong> directly to <code>main</code> & <code>gh-pages</code>!<br>
+            <strong>🚀 Test 1 Passed (${modeLabel}): REAL File Pushed to GitHub via AWS Lambda!</strong><br>
+            • <strong>What Just Happened:</strong> AWS Lambda authenticated via Ed25519 SSH and pushed <code>${pushedFile}</code> in a <strong>brand-new commit</strong> directly to <code>main</code> & <code>gh-pages</code>!<br>
             • <strong>New Commit SHA:</strong> <code>#${sha}</code> (replaced parent <code>#${parentSha}</code> in ${pr.latency_ms || 0}ms)<br>
-            • <strong>Pushed File:</strong> Updated <a href="${fileUrl}" target="_blank" style="color:var(--accent-blue);font-weight:700;"><code>live_push_receipt.json</code> ↗</a> at <code>${pr.pushed_at_utc || ''}</code><br>
+            • <strong>Pushed File on GitHub:</strong> <a href="${fileUrl}" target="_blank" style="color:var(--accent-blue);font-weight:700;"><code>${pushedFile}</code> ↗</a> at <code>${pr.pushed_at_utc || ''}</code><br>
             • <strong>Verify on GitHub:</strong> <a href="${commitUrl}" target="_blank" style="color:var(--accent-green);font-weight:800;">🔗 Click Here to Open Commit #${sha} on GitHub ↗</a>
           `
           );
-          appendLog(`[TEST 1 PASS] Real git push succeeded! New Commit #${sha} -> ${commitUrl}`);
+          appendLog(`[TEST 1 PASS] Real git push succeeded! File "${pushedFile}" committed in #${sha} -> ${fileUrl}`);
         } else {
-          lastTestContext = `Test 1 (Simulated git push origin main): Simulated direct commit #a1202bb upload to main.`;
-          markTestPassed(1, `✅ SIMULATED PUSH: Commit #a1202bb -> main ($0)`, `
+          lastTestContext = `Test 1 (Simulated git push origin main): Simulated pushing ${customName} (#a1202bb) to main.`;
+          markTestPassed(1, `✅ SIMULATED PUSH: ${customName} (#a1202bb) -> main ($0)`, `
             <strong>🚀 Test 1 Passed (${modeLabel}): <code>git push origin main</code></strong><br>
-            • <strong>What Happened:</strong> Simulated uploading commit <code>#a1202bb</code> directly from laptop to <code>main</code>.<br>
-            • <strong>Key Difference vs PR:</strong> <code>git push</code> uploads commits directly to a branch without pausing for a Pull Request review gate.
+            • <strong>What Happened:</strong> Simulated uploading <code>${customName}</code> (commit <code>#a1202bb</code>) to <code>main</code>.<br>
+            • <strong>Unlock Owner Mode:</strong> Enter your Owner Passcode above to push your real custom file directly to GitHub via AWS Lambda!
           `);
-          appendLog("[TEST 1 PASS] Simulated git push origin main (#a1202bb).");
+          appendLog(`[TEST 1 PASS] Simulated git push of ${customName} (#a1202bb).`);
         }
       }
 
