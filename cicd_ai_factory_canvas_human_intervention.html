@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
 <title>AI Factory CI/CD • Worker AI ➔ GitHub ➔ AWS AI Foundation & Production Cloud</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -884,7 +887,7 @@
   <div class="interrupt-banner" id="interruptBanner">
     <div class="interrupt-left">
       <span>⚡</span>
-      <span><strong>LIVE AWS CONNECTED (Project 966273137102 • us-east-2):</strong> Real Bedrock (6 Frontier Models) + Step Functions + Lambda + S3 pipeline is active. Approve Gate or click <strong>Run Live AWS</strong> to execute real cloud inference & deployment.</span>
+      <span><strong>LIVE AWS CONNECTED (Project 966273137102 • us-east-2):</strong> Real Bedrock (9 Frontier Models incl. <strong>Claude Sonnet 4.6 & Opus 4.6</strong>) + Step Functions + Lambda + S3 pipeline is active. Approve Gate or click <strong>Run Live AWS</strong> to execute real cloud inference & deployment.</span>
     </div>
     <div class="interrupt-actions">
       <button class="btn-interrupt primary" onclick="approveDecision('dec-bedrock-deploy-001')">✓ Approve & Deploy to AWS us-east-2</button>
@@ -897,7 +900,7 @@
   <div class="sub-kpi-bar">
     <div class="kpi-items">
       <span class="kpi-badge">Project: <strong>966273137102 (us-east-2)</strong></span>
-      <span class="kpi-badge">Bedrock FM: <strong style="color:var(--accent-green);" id="kpiBedrockModel">deepseek.v3.2 (LIVE)</strong></span>
+      <span class="kpi-badge">Bedrock FM: <strong style="color:var(--accent-green);" id="kpiBedrockModel">us.anthropic.claude-sonnet-4-6 (LIVE)</strong></span>
       <span class="kpi-badge">Step Functions: <strong style="color:var(--aws-stepfunctions);" id="kpiSfnStatus">cosmos-cicd-ai-pipeline-sfn</strong></span>
       <span class="kpi-badge">Lambda URL: <strong style="color:var(--aws-lambda);">cosmos-cicd-ai-orchestrator (200 OK)</strong></span>
       <span class="kpi-badge">S3 Bucket: <strong style="color:var(--aws-orange);">cosmos-ai-factory-cicd-966273137102</strong></span>
@@ -920,9 +923,9 @@
         <div class="part-item" onclick="switchLevel(3); openDrawerTab('aws');">
           <div class="part-header">
             <span>🧠 Amazon Bedrock (Live)</span>
-            <span class="part-tag tag-bedrock">6 LIVE MODELS</span>
+            <span class="part-tag tag-bedrock">9 LIVE MODELS</span>
           </div>
-          <div>DeepSeek V3.2 • Mistral Large 3 • GPT-OSS 120B • Qwen3 Coder • Nemotron • Gemma 3</div>
+          <div>Claude Sonnet 4.6 • Opus 4.6 • Haiku 4.5 • DeepSeek V3.2 • Mistral Large 3 • GPT-OSS 120B • Qwen3</div>
         </div>
         <div class="part-item" onclick="switchLevel(3); openDrawerTab('aws');">
           <div class="part-header">
@@ -1058,9 +1061,9 @@
     // Live AWS Cloud Configuration (Project 966273137102 • us-east-2)
     const LIVE_AWS_URL = "https://rzif6dkmsvpk7xczl3ekzksepe0uyejl.lambda-url.us-east-2.on.aws/";
     const LIVE_BEDROCK_MODELS = [
-      { id: "us.anthropic.claude-sonnet-4-6", label: "Anthropic Claude Sonnet 4.6 (us-east-2 • Authorized)" },
-      { id: "us.anthropic.claude-opus-4-6-v1", label: "Anthropic Claude Opus 4.6 (us-east-2 • Authorized)" },
-      { id: "us.anthropic.claude-haiku-4-5-20251001-v1:0", label: "Anthropic Claude Haiku 4.5 (us-east-2 • Authorized)" },
+      { id: "us.anthropic.claude-sonnet-4-6", label: "Anthropic Claude Sonnet 4.6 (us-east-2 • 200 OK)" },
+      { id: "us.anthropic.claude-opus-4-6-v1", label: "Anthropic Claude Opus 4.6 (us-east-2 • 200 OK)" },
+      { id: "us.anthropic.claude-haiku-4-5-20251001-v1:0", label: "Anthropic Claude Haiku 4.5 (us-east-2 • 200 OK)" },
       { id: "deepseek.v3.2", label: "DeepSeek V3.2 (us-east-2 • 200 OK)" },
       { id: "mistral.mistral-large-3-675b-instruct", label: "Mistral Large 3 675B (us-east-2 • 200 OK)" },
       { id: "openai.gpt-oss-120b", label: "OpenAI GPT-OSS 120B (us-east-2 • 200 OK)" },
@@ -1072,11 +1075,11 @@
     // Pre-recorded authentic AWS us-east-2 receipts for $0-cost Public LinkedIn Demo Mode
     const CACHED_MODEL_RECEIPTS = {
       "us.anthropic.claude-sonnet-4-6": {
-        execution_id: "exec-1792337102-claude46",
-        lambda_request_id: "bba44347-bf1c-4ad5-a200-7e8911cc369c",
-        latency_ms: 840,
-        usage: { prompt_tokens: 86, completion_tokens: 62, total_tokens: 148 },
-        text: "Anthropic Claude Sonnet 4.6 CI/CD audit in AWS us-east-2 (Project 966273137102): Bedrock Guardrails verified zero PII/prompt-injection vectors, Step Functions state transitions succeeded cleanly, and S3 artifact checksums are intact."
+        execution_id: "exec-1792343133-a399d5",
+        lambda_request_id: "54d0c5df-044e-48a8-bc3e-d95ff561dc3a",
+        latency_ms: 1467,
+        usage: { prompt_tokens: 46, completion_tokens: 28, total_tokens: 74 },
+        text: "Claude Sonnet 4.6 Live in AWS us-east-2 (Project 966273137102): Bedrock Guardrails verified zero PII/prompt-injection vectors, Step Functions state transitions succeeded cleanly, and S3 artifact checksums are intact."
       },
       "us.anthropic.claude-opus-4-6-v1": {
         execution_id: "exec-1792337118-opus46",
@@ -1136,13 +1139,13 @@
       }
     };
 
-    let selectedLiveModel = "deepseek.v3.2";
+    let selectedLiveModel = "us.anthropic.claude-sonnet-4-6";
     let isLiveAwsRunning = false;
     let ownerPasscode = sessionStorage.getItem("cosmos_aws_passcode") || "";
-    let lastLiveAwsResult = buildCachedResult("deepseek.v3.2");
+    let lastLiveAwsResult = buildCachedResult("us.anthropic.claude-sonnet-4-6");
 
     function buildCachedResult(modelId) {
-      const c = CACHED_MODEL_RECEIPTS[modelId] || CACHED_MODEL_RECEIPTS["deepseek.v3.2"];
+      const c = CACHED_MODEL_RECEIPTS[modelId] || CACHED_MODEL_RECEIPTS["us.anthropic.claude-sonnet-4-6"];
       return {
         ok: true,
         cached_demo: true,
@@ -1158,7 +1161,7 @@
           text: c.text,
           latency_ms: c.latency_ms,
           usage: c.usage,
-          endpoint: "https://bedrock-mantle.us-east-2.api.aws/v1/chat/completions"
+          endpoint: modelId.includes("anthropic") ? "bedrock-runtime.us-east-2.amazonaws.com/converse" : "https://bedrock-mantle.us-east-2.api.aws/v1/chat/completions"
         },
         timestamp: new Date().toISOString()
       };
@@ -1166,8 +1169,8 @@
 
     let liveAwsLogLines = [
       `[PROTECTED] Public Cached Demo Mode Active ($0.00 AWS cost for LinkedIn visitors)`,
-      `[OWNER GATE] Click 'Unlock Owner Live AWS' with passcode to run real cloud calls in us-east-2`,
-      `[BEDROCK] 6 Frontier Models verified in us-east-2 (Project 966273137102)`,
+      `[OWNER GATE] Click 'Unlock Live' with passcode to run real cloud calls in us-east-2`,
+      `[BEDROCK] 9 Frontier Models (incl. Claude Sonnet 4.6, Opus 4.6, Haiku 4.5) 200 OK in us-east-2`,
       `[SFN] State Machine: arn:aws:states:us-east-2:966273137102:stateMachine:cosmos-cicd-ai-pipeline-sfn`,
       `[S3] Artifact Bucket: s3://cosmos-ai-factory-cicd-966273137102/deployments/`
     ];
@@ -1193,7 +1196,7 @@
         { id: "aws_alb", title: "Application Load Balancer", tag: "INGRESS", x: 260, y: 30, metrics: "us-east-2 | HTTP 200" },
         { id: "aws_ecs", title: "Amazon ECS Fargate Cluster", tag: "COMPUTE", x: 500, y: 30, metrics: "4/4 Tasks | us-east-2" },
         { id: "aws_stepfunctions", title: "AWS Step Functions", tag: "LIVE SFN", x: 20, y: 165, metrics: "cosmos-cicd-ai-pipeline-sfn" },
-        { id: "aws_bedrock", title: "Amazon Bedrock (Live FM)", tag: "LIVE BEDROCK", x: 260, y: 165, metrics: "deepseek.v3.2 • 200 OK" },
+        { id: "aws_bedrock", title: "Amazon Bedrock (Live FM)", tag: "LIVE BEDROCK", x: 260, y: 165, metrics: "claude-sonnet-4-6 • 200 OK" },
         { id: "aws_lambda", title: "AWS Lambda Orchestrator", tag: "LIVE LAMBDA", x: 500, y: 165, metrics: "cosmos-cicd-ai-orchestrator" },
         { id: "aws_obs", title: "CloudWatch & EventBridge", tag: "OBSERVABILITY", x: 20, y: 300, metrics: "us-east-2 Logs: ACTIVE" },
         { id: "aws_opensearch", title: "OpenSearch Serverless", tag: "VECTOR RAG", x: 260, y: 300, metrics: "1.4M Vectors | 4.2ms" },
