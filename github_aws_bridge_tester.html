@@ -430,11 +430,16 @@
 
         <div class="test-card" id="tc2">
           <div class="tc-top">
-            <span>🛡️ Test 2: Pull Request (PR #42 Gate)</span>
-            <button class="btn btn-purple" onclick="runTest(2)">▶️ Test PR Gate</button>
+            <span>🛡️ Test 2: Pull Request (Initiate Branch & Review Diff)</span>
+            <button class="btn btn-purple" onclick="runTest(2)">▶️ Initiate Branch & PR</button>
           </div>
-          <div class="tc-desc">Proposes merging <code>feat/v3.2</code> ➔ <code>main</code>; enforces AI diff review + CI checks + Human Approval.</div>
-          <div class="tc-result" id="res2">Ready to test Pull Request review gate...</div>
+          <div class="tc-desc">Propose changes in an isolated sandbox branch without touching production <code>main</code>:</div>
+          <div style="display:flex; gap:5px; flex-wrap:wrap; margin:2px 0;">
+            <input type="text" id="prBranchName" value="feat/v3.2-canary" placeholder="Branch (e.g. feat/my-feature)" style="flex:1; min-width:130px; font-size:10px; padding:4px 6px;">
+            <input type="text" id="prFileName" value="live_push_receipt.json" placeholder="Target file" style="width:140px; font-size:10px; padding:4px 6px;">
+          </div>
+          <input type="text" id="prFileContent" value="PROPOSED CHANGE: Canary update to model Claude Sonnet 4.6 for PR review" placeholder="Type proposed change to review in PR diff..." style="width:100%; font-size:10px; padding:4px 6px; margin-bottom:2px;">
+          <div class="tc-result" id="res2">Ready to initiate branch and review diff...</div>
         </div>
       </div>
 
@@ -936,42 +941,49 @@
         }
       }
 
-      // TEST 2: Pull Request (PR #42 Gate)
+      // TEST 2: Pull Request (PR Gate)
       else if (idx === 2) {
         activeHighlightStage = 2;
-        spawnPackets(0, 1, "#7C3AED", "Push feat/v3.2");
-        setTimeout(() => spawnPackets(1, 2, "#059669", "CI Check"), 350);
-        document.getElementById("hudCenter").textContent = "Flow: Feature Branch (feat/v3.2-canary) ➔ PR Gate ➔ Actions CI";
+        const brName = (document.getElementById("prBranchName")?.value || "feat/v3.2-canary").trim();
+        const fName = (document.getElementById("prFileName")?.value || "live_push_receipt.json").trim();
+        const fContent = (document.getElementById("prFileContent")?.value || "").trim();
+        spawnPackets(0, 1, "#7C3AED", `branch ${brName}`);
+        setTimeout(() => spawnPackets(1, 2, "#059669", "CI Gate"), 350);
+        document.getElementById("hudCenter").textContent = `Flow: Feature Branch (${brName}) ➔ PR Gate ➔ Actions CI`;
         if (isLive) {
-          document.getElementById("res2").textContent = "⏳ Pushing real feature branch (feat/v3.2-canary) to GitHub...";
-          appendLog("[TEST 2 LIVE] Pushing real commit to sandbox branch feat/v3.2-canary for Pull Request Gate...");
+          document.getElementById("res2").textContent = `⏳ Initiating branch "${brName}" on GitHub via AWS Lambda...`;
+          appendLog(`[TEST 2 LIVE] Pushing proposed changes to sandbox branch "${brName}" on cosmosanalytics/AWS...`);
           const resp = await fetch(LIVE_AWS_URL, {
             method: "POST",
             headers: { "Content-Type": "application/json", "X-Cosmos-Key": ownerPasscode },
             body: JSON.stringify({
               action: "git_pr_branch",
-              branch: "feat/v3.2-canary",
+              branch: brName,
+              file_name: fName,
+              file_content: fContent,
               model: document.getElementById("bedrockModelSelect").value,
-              note: "Triggered from Owner Live Bridge Test Lab (Test 2: Pull Request Gate on feat/v3.2-canary)"
+              note: fContent || "Triggered from Owner Live Bridge Test Lab (Test 2: Pull Request Gate)"
             })
           });
           const data = await resp.json();
           const pr = data.push_result || {};
           const sha = pr.short_sha || "HEAD";
-          const compareUrl = pr.compare_url || "https://github.com/cosmosanalytics/AWS/compare/main...feat/v3.2-canary";
-          document.getElementById("inspBranches").textContent = `main • gh-pages • feat/v3.2-canary(#${sha})`;
-          lastTestContext = `Test 2 (REAL Pull Request Branch Push): Pushed Commit #${sha} to feature branch feat/v3.2-canary for PR comparison against main.`;
+          const compareUrl = pr.compare_url || `https://github.com/cosmosanalytics/AWS/compare/main...${brName}`;
+          document.getElementById("inspBranches").textContent = `main • gh-pages • ${brName}(#${sha})`;
+          lastTestContext = `Test 2 (REAL Pull Request Branch Push): Pushed Commit #${sha} to feature branch ${brName} for PR comparison against main.`;
           markTestPassed(
             2,
-            `<span>✅ REAL PR BRANCH: <strong>feat/v3.2-canary (#${sha})</strong> • <a href="${compareUrl}" target="_blank" style="color:var(--accent-purple);text-decoration:underline;">Compare & Review PR on GitHub ↗</a></span>`,
+            `<span>✅ BRANCH READY: <strong>${brName} (#${sha})</strong> • <a href="${compareUrl}" target="_blank" style="color:var(--accent-purple);font-weight:700;text-decoration:underline;">Review Diff & Approve PR on GitHub ↗</a></span>`,
             `
-            <strong>🛡️ Test 2 Passed (${modeLabel}): Real Feature Branch Pushed for Pull Request!</strong><br>
-            • <strong>What Just Happened:</strong> Instead of touching <code>main</code> directly, pushed Commit <code>#${sha}</code> to sandbox branch <code>feat/v3.2-canary</code>.<br>
-            • <strong>Verify on GitHub:</strong> <a href="${compareUrl}" target="_blank" style="color:var(--accent-purple);font-weight:800;">🔗 Click Here to View PR Diff (main...feat/v3.2-canary) on GitHub ↗</a><br>
-            • <strong>Why PRs Exist:</strong> Holds changes in <code>feat/v3.2-canary</code> until AI Code Review, 48/48 CI tests, and Human Approval complete.
+            <strong>🛡️ Test 2 Passed (${modeLabel}): Feature Branch "${brName}" Initiated!</strong><br>
+            • <strong>What Just Happened:</strong> Pushed proposed changes to isolated sandbox branch <code>${brName}</code> (Commit <code>#${sha}</code>). Production <code>main</code> is untouched!<br>
+            • <strong>How to Review & Approve Now (3 Simple Steps):</strong><br>
+            &nbsp;&nbsp;1. <a href="${compareUrl}" target="_blank" style="color:var(--accent-purple);font-weight:800;">🔗 Click Here to Open GitHub Diff (${brName} vs main) ↗</a><br>
+            &nbsp;&nbsp;2. Inspect the green (<code>+</code>) additions vs red (<code>-</code>) deletions at the bottom of the page.<br>
+            &nbsp;&nbsp;3. Tap the green <strong>"Create pull request"</strong> button, then <strong>"Merge pull request"</strong> to officially approve and merge into <code>main</code>!
           `
           );
-          appendLog(`[TEST 2 PASS] Real PR branch feat/v3.2-canary (#${sha}) pushed -> ${compareUrl}`);
+          appendLog(`[TEST 2 PASS] Feature branch "${brName}" (#${sha}) pushed -> ${compareUrl}`);
         } else {
           lastTestContext = `Test 2 (Simulated Pull Request Gate): Verified PR #42 diff review + CI gate before merging into main.`;
           markTestPassed(2, `✅ SIMULATED PR #42: Diff + 48/48 CI + Human Gate`, `
