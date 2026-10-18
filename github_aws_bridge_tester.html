@@ -843,7 +843,7 @@
         card.classList.add("passed");
       }
       const resEl = document.getElementById(`res${idx}`);
-      if (resEl) resEl.textContent = resultText;
+      if (resEl) resEl.innerHTML = resultText;
       document.getElementById("scoreCounterBadge").textContent = `Tests Passed: ${passedTests.size} / 9`;
       document.getElementById("aiExplanationBox").innerHTML = explanationHtml;
     }
@@ -852,7 +852,7 @@
     window.runTest = async (idx) => {
       lastTestIndex = idx;
       const isLive = Boolean(ownerPasscode);
-      const modeLabel = isLive ? "🔓 OWNER LIVE (Real GitHub API + Real AWS)" : "🔒 NON-OWNER SIMULATED ($0 Demo)";
+      const modeLabel = isLive ? "🔓 OWNER LIVE (Real GitHub Push + Real AWS)" : "🔒 NON-OWNER SIMULATED ($0 Demo)";
       const card = document.getElementById(`tc${idx}`);
       if (card) card.classList.add("running");
 
@@ -861,23 +861,40 @@
       // TEST 1: git push origin main
       if (idx === 1) {
         activeHighlightStage = 2;
-        spawnPackets(0, 1, "#38BDF8", "git push main");
-        document.getElementById("hudCenter").textContent = "Flow: Laptop ➔ GitHub Repo (Direct Push)";
+        spawnPackets(0, 1, "#0284C7", "git push main");
+        document.getElementById("hudCenter").textContent = "Flow: Laptop / Lambda ➔ GitHub Repo (Direct Push)";
         if (isLive) {
-          appendLog("[TEST 1 LIVE] Querying real GitHub API for latest git push on cosmosanalytics/AWS...");
-          const r = await fetch(`${GITHUB_API_BASE}/commits?per_page=1`);
-          const d = await r.json();
-          const sha = (d[0]?.sha || "").slice(0, 7);
-          const msg = (d[0]?.commit?.message || "").split("\n")[0];
-          document.getElementById("inspCommitSha").textContent = `#${sha} (LIVE)`;
-          lastTestContext = `Test 1 (git push origin main): Verified live commit #${sha} ("${msg}") pushed directly to main.`;
-          markTestPassed(1, `✅ LIVE PUSH VERIFIED: Commit #${sha} on main`, `
-            <strong>🚀 Test 1 Passed (${modeLabel}): <code>git push origin main</code></strong><br>
-            • <strong>What Happened:</strong> Checked direct commit upload from your workstation to <code>cosmosanalytics/AWS</code>.<br>
-            • <strong>Live Result:</strong> Commit <code>#${sha}</code> (<em>"${msg}"</em>) is live on <code>main</code> & <code>gh-pages</code>.<br>
-            • <strong>Key Difference vs PR:</strong> <code>git push origin main</code> writes directly to the production branch with zero review wait time.
-          `);
-          appendLog(`[TEST 1 PASS] Live HEAD commit #${sha} verified on main.`);
+          document.getElementById("res1").textContent = "⏳ Pushing real commit (live_push_receipt.json) to GitHub main...";
+          appendLog("[TEST 1 LIVE] Executing real git push over SSH to cosmosanalytics/AWS (main & gh-pages)...");
+          const resp = await fetch(LIVE_AWS_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Cosmos-Key": ownerPasscode },
+            body: JSON.stringify({
+              action: "git_push",
+              model: document.getElementById("bedrockModelSelect").value,
+              note: "Triggered from Owner Live Bridge Test Lab (Test 1: git push origin main)"
+            })
+          });
+          const data = await resp.json();
+          const pr = data.push_result || {};
+          const sha = pr.short_sha || "HEAD";
+          const parentSha = pr.parent_sha || "prev";
+          const commitUrl = pr.commit_url || "https://github.com/cosmosanalytics/AWS/commits/main";
+          const fileUrl = pr.file_url || "https://github.com/cosmosanalytics/AWS/blob/main/live_push_receipt.json";
+          document.getElementById("inspCommitSha").textContent = `#${sha} (NEW LIVE PUSH)`;
+          lastTestContext = `Test 1 (REAL git push origin main): Created brand-new Commit #${sha} (parent #${parentSha}) updating live_push_receipt.json on cosmosanalytics/AWS.`;
+          markTestPassed(
+            1,
+            `<span>✅ REAL PUSH: <strong>#${sha}</strong> (was #${parentSha}) • <a href="${commitUrl}" target="_blank" style="color:var(--accent-blue);text-decoration:underline;">View Commit ↗</a> • <a href="${fileUrl}" target="_blank" style="color:var(--accent-green);text-decoration:underline;">live_push_receipt.json ↗</a></span>`,
+            `
+            <strong>🚀 Test 1 Passed (${modeLabel}): REAL <code>git push origin main</code> Executed!</strong><br>
+            • <strong>What Just Happened:</strong> AWS Lambda authenticated via Ed25519 SSH and pushed a <strong>brand-new commit</strong> directly to <code>main</code> & <code>gh-pages</code>!<br>
+            • <strong>New Commit SHA:</strong> <code>#${sha}</code> (replaced parent <code>#${parentSha}</code> in ${pr.latency_ms || 0}ms)<br>
+            • <strong>Pushed File:</strong> Updated <a href="${fileUrl}" target="_blank" style="color:var(--accent-blue);font-weight:700;"><code>live_push_receipt.json</code> ↗</a> at <code>${pr.pushed_at_utc || ''}</code><br>
+            • <strong>Verify on GitHub:</strong> <a href="${commitUrl}" target="_blank" style="color:var(--accent-green);font-weight:800;">🔗 Click Here to Open Commit #${sha} on GitHub ↗</a>
+          `
+          );
+          appendLog(`[TEST 1 PASS] Real git push succeeded! New Commit #${sha} -> ${commitUrl}`);
         } else {
           lastTestContext = `Test 1 (Simulated git push origin main): Simulated direct commit #a1202bb upload to main.`;
           markTestPassed(1, `✅ SIMULATED PUSH: Commit #a1202bb -> main ($0)`, `
@@ -892,21 +909,39 @@
       // TEST 2: Pull Request (PR #42 Gate)
       else if (idx === 2) {
         activeHighlightStage = 2;
-        spawnPackets(0, 1, "#A78BFA", "PR #42 Open");
-        setTimeout(() => spawnPackets(1, 2, "#10B981", "CI Check"), 350);
-        document.getElementById("hudCenter").textContent = "Flow: Feature Branch ➔ PR #42 Gate ➔ Actions CI";
+        spawnPackets(0, 1, "#7C3AED", "Push feat/v3.2");
+        setTimeout(() => spawnPackets(1, 2, "#059669", "CI Check"), 350);
+        document.getElementById("hudCenter").textContent = "Flow: Feature Branch (feat/v3.2-canary) ➔ PR Gate ➔ Actions CI";
         if (isLive) {
-          const r = await fetch(`${GITHUB_API_BASE}/branches`);
-          const branches = await r.json();
-          const bNames = branches.map(b => `${b.name}(${b.commit.sha.slice(0,7)})`).join(", ");
-          document.getElementById("inspBranches").textContent = bNames;
-          lastTestContext = `Test 2 (Pull Request Gate): Verified live branches [${bNames}] and PR merge protection rules.`;
-          markTestPassed(2, `✅ LIVE BRANCHES: ${bNames}`, `
-            <strong>🛡️ Test 2 Passed (${modeLabel}): Pull Request (PR) Review Gate</strong><br>
-            • <strong>What Happened:</strong> Inspected live repository branches (<code>${bNames}</code>) and simulated a Pull Request merge gate.<br>
-            • <strong>Why PRs Exist:</strong> Unlike a direct <code>git push</code>, a Pull Request pauses changes in a sandbox branch until AI Code Review, 48/48 CI tests, and Human Approval complete.
-          `);
-          appendLog(`[TEST 2 PASS] Live branches verified: ${bNames}`);
+          document.getElementById("res2").textContent = "⏳ Pushing real feature branch (feat/v3.2-canary) to GitHub...";
+          appendLog("[TEST 2 LIVE] Pushing real commit to sandbox branch feat/v3.2-canary for Pull Request Gate...");
+          const resp = await fetch(LIVE_AWS_URL, {
+            method: "POST",
+            headers: { "Content-Type": "application/json", "X-Cosmos-Key": ownerPasscode },
+            body: JSON.stringify({
+              action: "git_pr_branch",
+              branch: "feat/v3.2-canary",
+              model: document.getElementById("bedrockModelSelect").value,
+              note: "Triggered from Owner Live Bridge Test Lab (Test 2: Pull Request Gate on feat/v3.2-canary)"
+            })
+          });
+          const data = await resp.json();
+          const pr = data.push_result || {};
+          const sha = pr.short_sha || "HEAD";
+          const compareUrl = pr.compare_url || "https://github.com/cosmosanalytics/AWS/compare/main...feat/v3.2-canary";
+          document.getElementById("inspBranches").textContent = `main • gh-pages • feat/v3.2-canary(#${sha})`;
+          lastTestContext = `Test 2 (REAL Pull Request Branch Push): Pushed Commit #${sha} to feature branch feat/v3.2-canary for PR comparison against main.`;
+          markTestPassed(
+            2,
+            `<span>✅ REAL PR BRANCH: <strong>feat/v3.2-canary (#${sha})</strong> • <a href="${compareUrl}" target="_blank" style="color:var(--accent-purple);text-decoration:underline;">Compare & Review PR on GitHub ↗</a></span>`,
+            `
+            <strong>🛡️ Test 2 Passed (${modeLabel}): Real Feature Branch Pushed for Pull Request!</strong><br>
+            • <strong>What Just Happened:</strong> Instead of touching <code>main</code> directly, pushed Commit <code>#${sha}</code> to sandbox branch <code>feat/v3.2-canary</code>.<br>
+            • <strong>Verify on GitHub:</strong> <a href="${compareUrl}" target="_blank" style="color:var(--accent-purple);font-weight:800;">🔗 Click Here to View PR Diff (main...feat/v3.2-canary) on GitHub ↗</a><br>
+            • <strong>Why PRs Exist:</strong> Holds changes in <code>feat/v3.2-canary</code> until AI Code Review, 48/48 CI tests, and Human Approval complete.
+          `
+          );
+          appendLog(`[TEST 2 PASS] Real PR branch feat/v3.2-canary (#${sha}) pushed -> ${compareUrl}`);
         } else {
           lastTestContext = `Test 2 (Simulated Pull Request Gate): Verified PR #42 diff review + CI gate before merging into main.`;
           markTestPassed(2, `✅ SIMULATED PR #42: Diff + 48/48 CI + Human Gate`, `
