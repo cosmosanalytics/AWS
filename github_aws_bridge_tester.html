@@ -9,32 +9,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  :root {
-    --bg-page: #0B0F19;
-    --bg-card: #131B2B;
-    --bg-secondary: #1C263B;
-    --border-color: #2A364F;
-    --text-main: #F8FAFC;
-    --text-secondary: #94A3B8;
-    --text-muted: #64748B;
-    --accent-blue: #38BDF8;
-    --accent-teal: #2DD4BF;
-    --accent-green: #10B981;
-    --accent-amber: #F59E0B;
-    --accent-purple: #A78BFA;
-    --accent-rose: #F43F5E;
-    --aws-orange: #FF9900;
-    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    --font-mono: 'JetBrains Mono', Consolas, monospace;
-  }
-
-  body.light-mode {
-    --bg-page: #F8FAFC;
+  :root, body.light-mode {
+    --bg-page: #FFFFFF;
     --bg-card: #FFFFFF;
-    --bg-secondary: #F1F5F9;
+    --bg-secondary: #F8FAFC;
     --border-color: #CBD5E1;
     --text-main: #0F172A;
-    --text-secondary: #475569;
+    --text-secondary: #334155;
     --text-muted: #64748B;
     --accent-blue: #0284C7;
     --accent-teal: #0D9488;
@@ -42,6 +23,9 @@
     --accent-amber: #D97706;
     --accent-purple: #7C3AED;
     --accent-rose: #E11D48;
+    --aws-orange: #FF9900;
+    --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'JetBrains Mono', Consolas, monospace;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -220,7 +204,7 @@
     position: relative;
     width: 100%;
     height: 255px;
-    background: #070B12;
+    background: #FFFFFF;
     border: 1.5px solid var(--border-color);
     border-radius: 10px;
     overflow: hidden;
@@ -242,9 +226,10 @@
     font-size: 10px;
   }
   .hud-pill {
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid #334155;
-    color: #38BDF8;
+    background: #F0F9FF;
+    border: 1px solid #93C5FD;
+    color: #0369A1;
+    font-weight: 700;
     padding: 3px 8px;
     border-radius: 5px;
   }
@@ -333,13 +318,13 @@
     line-height: 1.45;
   }
   .log-console {
-    background: #05080F;
-    color: #10B981;
+    background: #F8FAFC;
+    color: #065F46;
     font-family: var(--font-mono);
     font-size: 10px;
     padding: 10px;
     border-radius: 8px;
-    border: 1px solid #1E293B;
+    border: 1px solid #CBD5E1;
     height: 215px;
     overflow-y: auto;
     white-space: pre-wrap;
@@ -760,19 +745,20 @@
     const canvas = document.getElementById("bridgeCanvas");
     const ctx = canvas.getContext("2d");
     const bridgeNodes = [
-      { x: 75,  y: 130, title: "💻 Laptop Git", sub: "push / branch", color: "#38BDF8" },
-      { x: 225, y: 70,  title: "🐙 GitHub Repo", sub: "main & PR #42", color: "#818CF8" },
-      { x: 225, y: 190, title: "🤖 Actions VM", sub: "Jobs 1–4 (Free)", color: "#10B981" },
-      { x: 475, y: 130, title: "⚡ AWS Lambda", sub: "SHA-256 Gate", color: "#FF9900" },
-      { x: 665, y: 65,  title: "🧠 Bedrock 4.6", sub: "9 Live Models", color: "#34D399" },
-      { x: 665, y: 195, title: "🔀 SFN + 🪣 S3", sub: "us-east-2 Store", color: "#F472B6" }
+      { x: 75,  y: 130, title: "💻 Laptop Git", sub: "push / branch", color: "#0284C7", bg: "#EFF6FF" },
+      { x: 225, y: 70,  title: "🐙 GitHub Repo", sub: "main & PR #42", color: "#6D28D9", bg: "#F5F3FF" },
+      { x: 225, y: 190, title: "🤖 Actions VM", sub: "Jobs 1–4 (Free)", color: "#059669", bg: "#ECFDF5" },
+      { x: 475, y: 130, title: "⚡ AWS Lambda", sub: "SHA-256 Gate", color: "#D97706", bg: "#FFFBEB" },
+      { x: 665, y: 65,  title: "🧠 Bedrock 4.6", sub: "9 Live Models", color: "#047857", bg: "#ECFDF5" },
+      { x: 665, y: 195, title: "🔀 SFN + 🪣 S3", sub: "us-east-2 Store", color: "#BE185D", bg: "#FDF2F8" }
     ];
 
     function drawBridge() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = "#FFFFFF";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Subtle background grid
-      ctx.strokeStyle = "rgba(148, 163, 184, 0.08)";
+      // Subtle background grid on white
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.18)";
       ctx.lineWidth = 1;
       for (let x = 0; x < canvas.width; x += 28) {
         ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, canvas.height); ctx.stroke();
@@ -787,7 +773,7 @@
       ];
       edges.forEach(([a, b]) => {
         const na = bridgeNodes[a], nb = bridgeNodes[b];
-        ctx.strokeStyle = "rgba(148, 163, 184, 0.28)";
+        ctx.strokeStyle = "#94A3B8";
         ctx.lineWidth = 2;
         ctx.setLineDash([5, 4]);
         ctx.beginPath();
@@ -813,11 +799,11 @@
 
           ctx.fillStyle = p.color;
           ctx.beginPath();
-          ctx.arc(px, py, 5.5, 0, Math.PI * 2);
+          ctx.arc(px, py, 6, 0, Math.PI * 2);
           ctx.fill();
 
           if (p.label) {
-            ctx.fillStyle = "#FFFFFF";
+            ctx.fillStyle = "#0F172A";
             ctx.font = "bold 10px 'JetBrains Mono', monospace";
             ctx.fillText(p.label, px - 28, py - 10);
           }
@@ -827,21 +813,21 @@
       // Draw nodes
       bridgeNodes.forEach((n, idx) => {
         const isHi = activeHighlightStage === idx + 1;
-        ctx.fillStyle = "#131B2B";
-        ctx.strokeStyle = isHi ? "#FFFFFF" : n.color;
+        ctx.fillStyle = isHi ? n.bg : "#FFFFFF";
+        ctx.strokeStyle = isHi ? "#0F172A" : n.color;
         ctx.lineWidth = isHi ? 3 : 2;
         ctx.beginPath();
         ctx.roundRect(n.x - 58, n.y - 26, 116, 52, 8);
         ctx.fill();
         ctx.stroke();
 
-        ctx.fillStyle = "#F8FAFC";
+        ctx.fillStyle = "#0F172A";
         ctx.font = "bold 11px 'Plus Jakarta Sans', sans-serif";
         ctx.textAlign = "center";
         ctx.fillText(n.title, n.x, n.y - 4);
 
         ctx.fillStyle = n.color;
-        ctx.font = "600 9.5px 'JetBrains Mono', monospace";
+        ctx.font = "700 9.5px 'JetBrains Mono', monospace";
         ctx.fillText(n.sub, n.x, n.y + 13);
       });
 
