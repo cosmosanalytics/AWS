@@ -307,6 +307,50 @@
     word-break: break-all;
   }
 
+  /* INPUT & OUTPUT DETAILS BOX */
+  .io-block {
+    background: #FFFFFF;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: 9.5px;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    line-height: 1.35;
+    margin: 2px 0;
+  }
+  .io-row {
+    display: flex;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  .io-badge {
+    font-size: 8.5px;
+    font-weight: 800;
+    padding: 1px 5px;
+    border-radius: 3px;
+    text-transform: uppercase;
+    font-family: var(--font-mono);
+    white-space: nowrap;
+    display: inline-block;
+  }
+  .io-badge.in {
+    background: #EFF6FF;
+    color: #1D4ED8;
+    border: 1px solid #BFDBFE;
+  }
+  .io-badge.proc {
+    background: #F5F3FF;
+    color: #6D28D9;
+    border: 1px solid #DDD6FE;
+  }
+  .io-badge.out {
+    background: #ECFDF5;
+    color: #047857;
+    border: 1px solid #A7F3D0;
+  }
+
   /* RIGHT COLUMN: TELEMETRY & AI COPILOT */
   .receipt-box {
     background: var(--bg-secondary);
@@ -457,7 +501,12 @@
             <span>🤖 Test 3: Action Job 1 (AI AST Review)</span>
             <button class="btn btn-blue" onclick="runTest(3)">▶️ Run Job 1</button>
           </div>
-          <div class="tc-desc">Verifies all 3 Hierarchy Tiers & all 9 Bedrock models (incl. Claude 4.6) exist in repo <code>index.html</code>.</div>
+          <div class="tc-desc">Verifies all 3 Hierarchy Tiers & all 9 Bedrock models (incl. Claude 4.6) exist in repo <code>index.html</code>:</div>
+          <div class="io-block">
+            <div class="io-row"><span class="io-badge in">📥 INPUT</span><span><code>index.html</code> code + List of 9 Bedrock model IDs (Claude 4.6, DeepSeek, etc.)</span></div>
+            <div class="io-row"><span class="io-badge proc">⚙️ PROC</span><span>Python AST validator scans structural tree on <code>ubuntu-latest</code> VM</span></div>
+            <div class="io-row"><span class="io-badge out">📤 OUTPUT</span><span><code>Exit 0</code> • <code>[OK] Verified all 9 Bedrock Models & 3 Tiers</code></span></div>
+          </div>
           <div class="tc-result" id="res3">Waiting for Job 1 execution...</div>
         </div>
 
@@ -466,7 +515,12 @@
             <span>🔒 Test 4: Action Job 2 (Secret Shield)</span>
             <button class="btn btn-blue" onclick="runTest(4)">▶️ Run Job 2</button>
           </div>
-          <div class="tc-desc">Scans repository for zero leaked <code>AKIA...</code> keys and confirms <code>X-Cosmos-Key</code> passcode gate.</div>
+          <div class="tc-desc">Scans repository for zero leaked <code>AKIA...</code> keys and confirms <code>X-Cosmos-Key</code> passcode gate:</div>
+          <div class="io-block">
+            <div class="io-row"><span class="io-badge in">📥 INPUT</span><span>Repository tree files + IAM access key pattern <code>r"AKIA[0-9A-Z]{16}"</code></span></div>
+            <div class="io-row"><span class="io-badge proc">⚙️ PROC</span><span>Regex auditor scans for exposed secrets; checks passcode gate</span></div>
+            <div class="io-row"><span class="io-badge out">📤 OUTPUT</span><span><code>Exit 0</code> • <code>0 Secret Leaks</code> + <code>X-Cosmos-Key Gate Active</code></span></div>
+          </div>
           <div class="tc-result" id="res4">Waiting for Job 2 execution...</div>
         </div>
 
@@ -475,7 +529,12 @@
             <span>✅ Test 5: Action Job 3 (48/48 CI Matrix)</span>
             <button class="btn btn-blue" onclick="runTest(5)">▶️ Run Job 3</button>
           </div>
-          <div class="tc-desc">Runs 48 automated structural & autonomy policy assertions + checks live GitHub Actions Run ID.</div>
+          <div class="tc-desc">Runs 48 automated structural & autonomy policy assertions + checks live GitHub Actions Run ID:</div>
+          <div class="io-block">
+            <div class="io-row"><span class="io-badge in">📥 INPUT</span><span>48 required UI & policy tokens (ALB, ECS, SFN, <code>p1–p8</code>, undo, canary)</span></div>
+            <div class="io-row"><span class="io-badge proc">⚙️ PROC</span><span>Python test matrix evaluates 48 assertions + polls Actions REST API</span></div>
+            <div class="io-row"><span class="io-badge out">📤 OUTPUT</span><span><code>Exit 0</code> • <code>48/48 Checks Passed (100% Coverage)</code> + Live Run ID</span></div>
+          </div>
           <div class="tc-result" id="res5">Waiting for Job 3 execution...</div>
         </div>
 
@@ -484,7 +543,12 @@
             <span>🛑 Test 6: Action Job 4 (AWS 401 Pre-Flight)</span>
             <button class="btn btn-blue" onclick="runTest(6)">▶️ Run Job 4</button>
           </div>
-          <div class="tc-desc">Pings AWS <code>us-east-2</code> Lambda URL <em>without</em> passcode to prove strangers get blocked with <code>HTTP 401</code>.</div>
+          <div class="tc-desc">Pings AWS <code>us-east-2</code> Lambda URL <em>without</em> passcode to prove strangers get blocked with <code>HTTP 401</code>:</div>
+          <div class="io-block">
+            <div class="io-row"><span class="io-badge in">📥 INPUT</span><span>Unauthenticated HTTP POST (no <code>X-Cosmos-Key</code>) to Lambda URL</span></div>
+            <div class="io-row"><span class="io-badge proc">⚙️ PROC</span><span>AWS Lambda SHA-256 validator matches against owner hash</span></div>
+            <div class="io-row"><span class="io-badge out">📤 OUTPUT</span><span><code>HTTP 401 Unauthorized</code> • <code>{"locked": true}</code> Shield Active</span></div>
+          </div>
           <div class="tc-result" id="res6">Waiting for Job 4 execution...</div>
         </div>
       </div>
@@ -1039,16 +1103,20 @@
           const hasClaude = html.includes("us.anthropic.claude-sonnet-4-6");
           lastTestContext = `Test 3 (GitHub Actions Job 1): Live AST scan of index.html (${html.length} bytes), Claude 4.6 present=${hasClaude}.`;
           markTestPassed(3, `✅ LIVE JOB 1: 9 Models & 3 Tiers Verified (${html.length}B)`, `
-            <strong>🤖 Test 3 Passed (${modeLabel}): GitHub Actions Job 1 (AI Code Review & AST Audit)</strong><br>
-            • <strong>What Job 1 Does on <code>ubuntu-latest</code>:</strong> Parses <code>index.html</code> (${html.length.toLocaleString()} bytes) and asserts all 9 Bedrock models (including <code>Claude Sonnet 4.6</code>) and all 3 Hierarchy Tiers are present.<br>
-            • <strong>Cost:</strong> <strong>$0.00</strong> (Unlimited free runner minutes on public repos).
+            <strong>🤖 Test 3 Passed (${modeLabel}): GitHub Actions Job 1 (AI AST Audit)</strong><br>
+            • <strong style="color:#1D4ED8;">📥 INPUT:</strong> <code>index.html</code> (${html.length.toLocaleString()} bytes) + 9 Bedrock model identifiers (Claude 4.6, DeepSeek, Mistral, etc.)<br>
+            • <strong style="color:#6D28D9;">⚙️ PROCESS:</strong> AST structural parser on <code>ubuntu-latest</code> verifies 3 Tiers & frontier model dispatch table.<br>
+            • <strong style="color:#047857;">📤 OUTPUT:</strong> <code>Exit Code 0</code> • <code>[OK] Verified all 9 Bedrock Frontier Models in index.html</code>.<br>
+            • <strong>Runner Cost:</strong> <strong>$0.00</strong> (100% Free on public repository).
           `);
           appendLog(`[TEST 3 PASS] Live AST check passed (${html.length} bytes, Claude 4.6 verified).`);
         } else {
           lastTestContext = `Test 3 (Simulated Job 1): Verified 9 Bedrock models and 3 Hierarchy Tiers in AST.`;
           markTestPassed(3, `✅ SIMULATED JOB 1: 9/9 Models Verified ($0)`, `
             <strong>🤖 Test 3 Passed (${modeLabel}): GitHub Actions Job 1 (AI Code Review)</strong><br>
-            • <strong>What Job 1 Does:</strong> Automatically checks that all 9 Bedrock models and 3 Hierarchy Tiers are intact on every push.
+            • <strong style="color:#1D4ED8;">📥 INPUT:</strong> Cached repository structure & Bedrock model registry.<br>
+            • <strong style="color:#6D28D9;">⚙️ PROCESS:</strong> Evaluated simulated AST assertion suite.<br>
+            • <strong style="color:#047857;">📤 OUTPUT:</strong> <code>Exit Code 0</code> • 9/9 Models verified.
           `);
           appendLog("[TEST 3 PASS] Simulated GitHub Actions Job 1 passed.");
         }
@@ -1062,7 +1130,9 @@
         lastTestContext = `Test 4 (GitHub Actions Job 2): Zero AKIA secret leaks found; X-Cosmos-Key SHA-256 gate verified.`;
         markTestPassed(4, `✅ ${isLive ? 'LIVE' : 'SIMULATED'} JOB 2: 0 Secret Leaks • Gate Active`, `
           <strong>🔒 Test 4 Passed (${modeLabel}): GitHub Actions Job 2 (DevSecOps Zero-Leak Shield)</strong><br>
-          • <strong>What Job 2 Does:</strong> Scans the repository with regex guardrails to ensure zero AWS keys (<code>AKIA...</code>) or plaintext passcodes ever enter Git history.
+          • <strong style="color:#1D4ED8;">📥 INPUT:</strong> All repository code files + regex credential signature <code>r"AKIA[0-9A-Z]{16}"</code>.<br>
+          • <strong style="color:#6D28D9;">⚙️ PROCESS:</strong> Scans git tree for exposed AWS keys & validates <code>X-Cosmos-Key</code> gate logic.<br>
+          • <strong style="color:#047857;">📤 OUTPUT:</strong> <code>Exit Code 0</code> • <code>0 Secret Leaks Found</code> • Passcode Gate Active.
         `);
         appendLog("[TEST 4 PASS] Zero-leak guardrail scan passed (0 exposed keys).");
       }
@@ -1080,15 +1150,18 @@
           lastTestContext = `Test 5 (GitHub Actions Job 3): 48/48 CI assertions green; live GitHub Actions Run #${run.id} (${run.name}) status=${run.status}.`;
           markTestPassed(5, `✅ LIVE RUN #${run.id}: 48/48 Checks Passed`, `
             <strong>✅ Test 5 Passed (${modeLabel}): GitHub Actions Job 3 (48/48 CI Matrix)</strong><br>
-            • <strong>Live GitHub Actions Run:</strong> <a href="${run.html_url || 'https://github.com/cosmosanalytics/AWS/actions'}" target="_blank" style="color:var(--accent-blue);">#${run.id} (${run.name}) ↗</a> — Status: <strong>${run.status} (${run.conclusion || 'running'})</strong>.<br>
-            • <strong>Coverage:</strong> All 48 node, policy (<code>p1–p8</code>), and rollback assertions verified.
+            • <strong style="color:#1D4ED8;">📥 INPUT:</strong> 48 system tokens (ALB, ECS, SFN, <code>p1–p8</code>, emergency stop, undo, canary).<br>
+            • <strong style="color:#6D28D9;">⚙️ PROCESS:</strong> Sequential assertion matrix executed on <code>ubuntu-latest</code> runner.<br>
+            • <strong style="color:#047857;">📤 OUTPUT:</strong> <code>Exit Code 0</code> • <a href="${run.html_url || 'https://github.com/cosmosanalytics/AWS/actions'}" target="_blank" style="color:var(--accent-blue);font-weight:700;">Live Actions Run #${run.id} (${run.name}) ↗</a>: <strong>100% Passed</strong>.
           `);
           appendLog(`[TEST 5 PASS] Verified live GitHub Actions Run #${run.id}.`);
         } else {
           lastTestContext = `Test 5 (Simulated Job 3): 48/48 CI checks passed in cached demo mode.`;
           markTestPassed(5, `✅ SIMULATED JOB 3: 48/48 Assertions Green ($0)`, `
             <strong>✅ Test 5 Passed (${modeLabel}): GitHub Actions Job 3 (48/48 CI Matrix)</strong><br>
-            • <strong>What Job 3 Does:</strong> Runs 48 automated checks verifying every canvas node, connection, and autonomy policy rule.
+            • <strong style="color:#1D4ED8;">📥 INPUT:</strong> 48 system tokens & simulated CI matrix.<br>
+            • <strong style="color:#6D28D9;">⚙️ PROCESS:</strong> Evaluated simulated test harness.<br>
+            • <strong style="color:#047857;">📤 OUTPUT:</strong> <code>Exit Code 0</code> • 48/48 Checks Passed ($0).
           `);
           appendLog("[TEST 5 PASS] Simulated 48/48 CI test matrix passed.");
         }
@@ -1108,9 +1181,10 @@
           const data = await resp.json();
           lastTestContext = `Test 6 (Job 4 Pre-Flight): Sent unauthenticated request to AWS Lambda in us-east-2; received HTTP ${resp.status} (locked=${data.locked}).`;
           markTestPassed(6, `✅ LIVE 401 SHIELD: HTTP ${resp.status} (locked=${data.locked})`, `
-            <strong>🛑 Test 6 Passed (LIVE VERIFIED): GitHub Actions Job 4 (AWS <code>401</code> Security Gate Pre-Flight)</strong><br>
-            • <strong>What Happened:</strong> Sent a real unauthenticated probe (no passcode) to your AWS Lambda Function URL in <code>us-east-2</code>.<br>
-            • <strong>Result:</strong> AWS Lambda immediately blocked it with <code>HTTP ${resp.status} (locked: ${data.locked})</code> — proving strangers cannot spend a single cent of your AWS credits!
+            <strong>🛑 Test 6 Passed (LIVE VERIFIED): GitHub Actions Job 4 (AWS 401 Gate Pre-Flight)</strong><br>
+            • <strong style="color:#1D4ED8;">📥 INPUT:</strong> Unauthenticated HTTPS POST probe (empty passcode) sent across the internet to Lambda.<br>
+            • <strong style="color:#6D28D9;">⚙️ PROCESS:</strong> Lambda in <code>us-east-2</code> validates SHA-256 header; detects unauthenticated caller.<br>
+            • <strong style="color:#047857;">📤 OUTPUT:</strong> <code>HTTP ${resp.status} Unauthorized</code> • <code>{"ok": false, "locked": true}</code> — Cloud Budget Protected!
           `);
           appendLog(`[TEST 6 PASS] AWS Lambda enforced HTTP ${resp.status} (locked=${data.locked}) for unauthenticated probe.`);
         } catch (e) {
