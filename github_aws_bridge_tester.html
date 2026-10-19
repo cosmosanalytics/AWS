@@ -234,52 +234,131 @@
     border-radius: 5px;
   }
 
-  /* 9 INTERACTIVE TEST MODULES */
-  .test-section-title {
-    font-size: 11px;
+  /* INDEPENDENT TEST TABS NAVIGATION */
+  .module-filter-bar {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+    padding: 6px 0 4px 0;
+    align-items: center;
+  }
+  .module-pill {
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    background: #F1F5F9;
+    color: #475569;
+    border: 1px solid #CBD5E1;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .module-pill:hover {
+    background: #E2E8F0;
+    color: #0F172A;
+  }
+  .module-pill.active {
+    background: #0284C7;
+    color: #FFFFFF;
+    border-color: #0284C7;
     font-weight: 800;
-    text-transform: uppercase;
+  }
+
+  .test-tabs-bar {
+    display: flex;
+    gap: 5px;
+    overflow-x: auto;
+    padding: 6px 2px 8px 2px;
+    margin: 4px 0 6px 0;
+    border-bottom: 2px solid #E2E8F0;
+    scrollbar-width: thin;
+  }
+  .test-tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 10px;
+    font-size: 10.5px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    background: #FFFFFF;
+    color: #334155;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 6px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.15s ease;
+  }
+  .test-tab-btn:hover {
+    background: #F0F9FF;
+    border-color: #93C5FD;
+    color: #0369A1;
+  }
+  .test-tab-btn.active {
+    background: #FFFFFF;
+    border-color: var(--accent-blue);
     color: var(--accent-blue);
-    margin-top: 2px;
+    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
+    font-weight: 800;
+  }
+  .test-tab-btn.passed {
+    border-color: var(--accent-green);
+    color: #047857;
+  }
+  .test-tab-btn.passed.active {
+    background: #F0FDF4;
+    border-color: var(--accent-green);
+    color: #047857;
+  }
+  .tab-badge {
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 800;
+  }
+
+  .tab-nav-controls {
     display: flex;
     justify-content: space-between;
     align-items: center;
-  }
-  .test-grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
-  }
-  .test-grid-4 {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 8px;
-  }
-  .test-grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 8px;
-  }
-  @media (max-width: 720px) {
-    .test-grid-2, .test-grid-4, .test-grid-3 { grid-template-columns: 1fr; }
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 6px;
+    padding: 6px 10px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+    gap: 6px;
   }
 
+  /* INDEPENDENT TEST PANELS */
+  .test-panels-container {
+    width: 100%;
+    min-height: 260px;
+  }
   .test-card {
-    background: var(--bg-secondary);
+    display: none; /* Hidden unless active tab */
+    background: #FFFFFF;
     border: 1.5px solid var(--border-color);
     border-radius: 8px;
-    padding: 9px 10px;
-    display: flex;
+    padding: 12px 14px;
     flex-direction: column;
-    gap: 5px;
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    gap: 7px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    animation: fadeInTab 0.18s ease-in-out;
+  }
+  .test-card.active-tab {
+    display: flex;
   }
   .test-card.passed {
     border-color: var(--accent-green);
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.18);
+    box-shadow: 0 0 14px rgba(16, 185, 129, 0.2);
   }
   .test-card.running {
     border-color: var(--accent-amber);
+    box-shadow: 0 0 14px rgba(245, 158, 11, 0.25);
+  }
+  @keyframes fadeInTab {
+    from { opacity: 0; transform: translateY(3px); }
+    to { opacity: 1; transform: translateY(0); }
   }
   .tc-top {
     display: flex;
@@ -450,13 +529,93 @@
         </div>
       </div>
 
-      <!-- MODULE A: GIT PUSH VS PULL REQUEST -->
-      <div class="test-section-title">
-        <span>Module A • How Code Enters GitHub: <code style="color:var(--accent-blue);">git push</code> vs. Pull Request (PR)</span>
-        <span>2 Tests</span>
+      <!-- INDEPENDENT TEST TABS NAVIGATION -->
+      <div class="module-filter-bar">
+        <span style="font-size:10px; font-weight:800; color:#64748B; margin-right:4px;">FILTER MODULE:</span>
+        <button type="button" class="module-pill active" id="filterModALL" onclick="filterModuleTabs('ALL')">All 14 Tests</button>
+        <button type="button" class="module-pill" id="filterModA" onclick="filterModuleTabs('A')">Mod A (Git/PR)</button>
+        <button type="button" class="module-pill" id="filterModB" onclick="filterModuleTabs('B')">Mod B (4 CI Jobs)</button>
+        <button type="button" class="module-pill" id="filterModC" onclick="filterModuleTabs('C')">Mod C (3 Bridge)</button>
+        <button type="button" class="module-pill" id="filterModD" onclick="filterModuleTabs('D')">Mod D (Shield & AI)</button>
+        <button type="button" class="module-pill" id="filterModE" onclick="filterModuleTabs('E')">Mod E (S3, Vector, Graph)</button>
       </div>
-      <div class="test-grid-2">
-        <div class="test-card" id="tc1">
+
+      <!-- 14 INDEPENDENT TEST TABS -->
+      <div class="test-tabs-bar" id="testTabsBar">
+        <button type="button" class="test-tab-btn active" id="tabBtn1" data-mod="A" onclick="switchTestTab(1)">
+          <span>🚀 Test 1: git push</span>
+          <span class="tab-badge" id="tabBadge1">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn2" data-mod="A" onclick="switchTestTab(2)">
+          <span>🛡️ Test 2: Pull Request</span>
+          <span class="tab-badge" id="tabBadge2">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn3" data-mod="B" onclick="switchTestTab(3)">
+          <span>🤖 Test 3: Job 1 (AST Review)</span>
+          <span class="tab-badge" id="tabBadge3">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn4" data-mod="B" onclick="switchTestTab(4)">
+          <span>🔒 Test 4: Job 2 (Secret Shield)</span>
+          <span class="tab-badge" id="tabBadge4">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn5" data-mod="B" onclick="switchTestTab(5)">
+          <span>✅ Test 5: Job 3 (48/48 CI)</span>
+          <span class="tab-badge" id="tabBadge5">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn6" data-mod="B" onclick="switchTestTab(6)">
+          <span>🛑 Test 6: Job 4 (401 Pre-Flight)</span>
+          <span class="tab-badge" id="tabBadge6">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn7" data-mod="C" onclick="switchTestTab(7)">
+          <span>① Test 7: Push GitHub➔AWS</span>
+          <span class="tab-badge" id="tabBadge7">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn8" data-mod="C" onclick="switchTestTab(8)">
+          <span>② Test 8: Pull GitHub➔AWS</span>
+          <span class="tab-badge" id="tabBadge8">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn9" data-mod="C" onclick="switchTestTab(9)">
+          <span>③ Test 9: Return AWS➔GitHub</span>
+          <span class="tab-badge" id="tabBadge9">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn10" data-mod="D" onclick="switchTestTab(10)">
+          <span>🛡️ Test 10: Cost Shield ($0 vs Live)</span>
+          <span class="tab-badge" id="tabBadge10">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn11" data-mod="D" onclick="switchTestTab(11)">
+          <span>🧠 Test 11: Multi-Engine AI</span>
+          <span class="tab-badge" id="tabBadge11">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn12" data-mod="E" onclick="switchTestTab(12)">
+          <span>🪣 Test 12: Amazon S3 (Up/Down)</span>
+          <span class="tab-badge" id="tabBadge12">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn13" data-mod="E" onclick="switchTestTab(13)">
+          <span>📐 Test 13: Vector DB Search</span>
+          <span class="tab-badge" id="tabBadge13">⚪</span>
+        </button>
+        <button type="button" class="test-tab-btn" id="tabBtn14" data-mod="E" onclick="switchTestTab(14)">
+          <span>🕸️ Test 14: Knowledge Graph</span>
+          <span class="tab-badge" id="tabBadge14">⚪</span>
+        </button>
+      </div>
+
+      <!-- ACTIVE TAB CONTROLS & BREADCRUMB -->
+      <div class="tab-nav-controls">
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button type="button" class="btn btn-secondary" style="font-size:10px; padding:3px 8px;" onclick="navigateTestTab(-1)">⬅️ Prev</button>
+          <button type="button" class="btn btn-secondary" style="font-size:10px; padding:3px 8px;" onclick="navigateTestTab(1)">Next ➡️</button>
+          <span id="activeTabBanner" style="font-size:11px; font-weight:800; color:#0F172A; margin-left:4px;">Test 1 of 14 • Module A: Test 1: git push origin main</span>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button type="button" class="btn btn-blue" id="runActiveTabBtn" style="font-size:10.5px; padding:4px 10px; font-weight:800;" onclick="runCurrentTabTest()">▶️ Run Test 1</button>
+        </div>
+      </div>
+
+      <!-- INDEPENDENT TEST PANELS WRAPPER -->
+      <div class="test-panels-container">
+        <!-- TEST 1 -->
+        <div class="test-card active-tab" id="tc1">
           <div class="tc-top">
             <span>🚀 Test 1: <code>git push origin main</code> (Push File via Lambda)</span>
             <button class="btn btn-blue" onclick="runTest(1)">▶️ Push File to GitHub</button>
@@ -477,6 +636,7 @@
           <div class="tc-result" id="res1">Ready to push file to GitHub...</div>
         </div>
 
+        <!-- TEST 2 -->
         <div class="test-card" id="tc2">
           <div class="tc-top">
             <span>🛡️ Test 2: Pull Request (Initiate Branch & Review Diff)</span>
@@ -498,14 +658,8 @@
           </div>
           <div class="tc-result" id="res2">Ready to initiate branch and review diff...</div>
         </div>
-      </div>
 
-      <!-- MODULE B: THE 4 GITHUB ACTIONS ROBOT JOBS -->
-      <div class="test-section-title">
-        <span>Module B • The 4 Automated GitHub Actions Robot Jobs (<code style="color:var(--accent-green);">ubuntu-latest</code> • 100% Free on Public Repo)</span>
-        <span>4 Tests (Customizable Inputs)</span>
-      </div>
-      <div class="test-grid-4">
+        <!-- TEST 3 -->
         <div class="test-card" id="tc3">
           <div class="tc-top">
             <span>🤖 Test 3: Action Job 1 (AI AST Review)</span>
@@ -528,6 +682,7 @@
           <div class="tc-result" id="res3">Waiting for Job 1 execution...</div>
         </div>
 
+        <!-- TEST 4 -->
         <div class="test-card" id="tc4">
           <div class="tc-top">
             <span>🔒 Test 4: Action Job 2 (Secret Shield)</span>
@@ -546,6 +701,7 @@
           <div class="tc-result" id="res4">Waiting for Job 2 execution...</div>
         </div>
 
+        <!-- TEST 5 -->
         <div class="test-card" id="tc5">
           <div class="tc-top">
             <span>✅ Test 5: Action Job 3 (48/48 CI Matrix)</span>
@@ -568,6 +724,7 @@
           <div class="tc-result" id="res5">Waiting for Job 3 execution...</div>
         </div>
 
+        <!-- TEST 6 -->
         <div class="test-card" id="tc6">
           <div class="tc-top">
             <span>🛑 Test 6: Action Job 4 (AWS 401 Pre-Flight)</span>
@@ -585,14 +742,8 @@
           </div>
           <div class="tc-result" id="res6">Waiting for Job 4 execution...</div>
         </div>
-      </div>
 
-      <!-- MODULE C: THE 3 GITHUB <-> AWS BRIDGE CONNECTIONS -->
-      <div class="test-section-title">
-        <span>Module C • Directional Information Flow Between GitHub & AWS (<code style="color:var(--aws-orange);">GitHub ➔ AWS</code> vs. <code style="color:var(--accent-green);">AWS ➔ GitHub</code>)</span>
-        <span>3 Tests (Customizable Inputs)</span>
-      </div>
-      <div class="test-grid-3">
+        <!-- TEST 7 -->
         <div class="test-card" id="tc7">
           <div class="tc-top">
             <span>① Push: GitHub ➔ AWS</span>
@@ -608,6 +759,7 @@
           <div class="tc-result" id="res7">Waiting for Connection ①...</div>
         </div>
 
+        <!-- TEST 8 -->
         <div class="test-card" id="tc8">
           <div class="tc-top">
             <span>② Pull: GitHub ➔ AWS</span>
@@ -623,6 +775,7 @@
           <div class="tc-result" id="res8">Waiting for Connection ②...</div>
         </div>
 
+        <!-- TEST 9 -->
         <div class="test-card" id="tc9">
           <div class="tc-top">
             <span>③ Return: AWS ➔ GitHub</span>
@@ -637,14 +790,8 @@
           </div>
           <div class="tc-result" id="res9">Waiting for Connection ③...</div>
         </div>
-      </div>
 
-      <!-- MODULE D: DUAL-MODE CLOUD SECURITY & MULTI-MODEL AI ENGINE -->
-      <div class="test-section-title">
-        <span>Module D • Dual-Mode Cloud Security & Multi-Model Inference (<code style="color:var(--accent-amber);">$0 Public Demo</code> vs. <code style="color:var(--accent-green);">Live AWS Cloud</code>)</span>
-        <span>2 Tests (Customizable Inputs)</span>
-      </div>
-      <div class="test-grid-2">
+        <!-- TEST 10 -->
         <div class="test-card" id="tc10">
           <div class="tc-top">
             <span>🛡️ Test 10: Dual-Mode Cost Shield ($0 Demo vs Live AWS)</span>
@@ -667,6 +814,7 @@
           <div class="tc-result" id="res10">Waiting for Dual-Mode Shield test...</div>
         </div>
 
+        <!-- TEST 11 -->
         <div class="test-card" id="tc11">
           <div class="tc-top">
             <span>🧠 Test 11: Multi-Engine AI Dispatch (WebGPU / Groq / Bedrock)</span>
@@ -681,15 +829,8 @@
           </div>
           <div class="tc-result" id="res11">Waiting for Multi-Engine AI test...</div>
         </div>
-      </div>
 
-      <!-- MODULE E: S3 OBJECT STORAGE, VECTOR DATABASE & GRAPH DATABASE LAB -->
-      <div class="test-section-title">
-        <span>Module E • Cloud Storage & AI Database Intelligence Lab (S3, Vector DB & Knowledge Graph)</span>
-        <span>3 Tests (Custom User Inputs)</span>
-      </div>
-      <div class="test-grid-3">
-        <!-- Test 12: S3 Object Storage (Upload & Download) -->
+        <!-- TEST 12 -->
         <div class="test-card" id="tc12">
           <div class="tc-top">
             <span>🪣 Test 12: Amazon S3 (Upload / Download)</span>
@@ -723,7 +864,7 @@
             </select>
           </div>
           <div id="s3FilePill" style="display:none; font-size:9.5px; color:var(--accent-green); font-weight:700; margin-bottom:2px;"></div>
-          <textarea id="s3ContentInput" rows="2" style="width:100%; font-size:10px; padding:4px 6px; margin-bottom:2px; font-family:var(--font-mono); resize:vertical;" placeholder="Payload content to upload or downloaded file content...">{"system":"Cosmos AI Factory","event":"S3 Verification","status":"active"}</textarea>
+          <textarea id="s3ContentInput" rows="3" style="width:100%; font-size:10px; padding:4px 6px; margin-bottom:2px; font-family:var(--font-mono); resize:vertical;" placeholder="Payload content to upload or downloaded file content...">{"system":"Cosmos AI Factory","event":"S3 Verification","status":"active"}</textarea>
           <div class="io-block">
             <div class="io-row"><span class="io-badge in">📥 INPUT</span><span>Op: <code id="lblS3Op">PutObject</code> • Key: <code id="lblS3Key">deployments/test-artifact.json</code></span></div>
             <div class="io-row"><span class="io-badge proc">⚙️ PROC</span><span>Amazon S3 Transfer Manager (<code>us-east-2</code>) • KMS Encryption • ETag Validation</span></div>
@@ -732,7 +873,7 @@
           <div class="tc-result" id="res12">Ready to upload or download from Amazon S3...</div>
         </div>
 
-        <!-- Test 13: Vector Database (Semantic Embeddings & Similarity) -->
+        <!-- TEST 13 -->
         <div class="test-card" id="tc13">
           <div class="tc-top">
             <span>📐 Test 13: Vector DB & Semantic Search</span>
@@ -756,7 +897,7 @@
           <div class="tc-result" id="res13">Ready to test Vector Database...</div>
         </div>
 
-        <!-- Test 14: Graph Database (Entities, Relations & Knowledge Graph) -->
+        <!-- TEST 14 -->
         <div class="test-card" id="tc14">
           <div class="tc-top">
             <span>🕸️ Test 14: Knowledge Graph Database</span>
@@ -852,6 +993,95 @@
     // Animated packets on the Bridge Visualizer Canvas
     let packets = [];
     let activeHighlightStage = 0;
+
+    // Independent Test Tabs State & Metadata
+    let currentActiveTab = 1;
+
+    const TEST_METADATA = [
+      { id: 1, mod: "A", title: "Test 1: git push origin main", stage: 2 },
+      { id: 2, mod: "A", title: "Test 2: Pull Request Gate", stage: 2 },
+      { id: 3, mod: "B", title: "Test 3: Action Job 1 (AI AST Review)", stage: 2 },
+      { id: 4, mod: "B", title: "Test 4: Action Job 2 (Secret Shield)", stage: 2 },
+      { id: 5, mod: "B", title: "Test 5: Action Job 3 (48/48 CI Matrix)", stage: 2 },
+      { id: 6, mod: "B", title: "Test 6: Action Job 4 (AWS 401 Pre-Flight)", stage: 3 },
+      { id: 7, mod: "C", title: "Test 7: Connection ① (GitHub ➔ AWS)", stage: 3 },
+      { id: 8, mod: "C", title: "Test 8: Connection ② (GitHub ➔ AWS)", stage: 3 },
+      { id: 9, mod: "C", title: "Test 9: Connection ③ (AWS ➔ GitHub)", stage: 4 },
+      { id: 10, mod: "D", title: "Test 10: Dual-Mode Cost Shield ($0 vs Live)", stage: 3 },
+      { id: 11, mod: "D", title: "Test 11: Multi-Engine AI Dispatch", stage: 4 },
+      { id: 12, mod: "E", title: "Test 12: Amazon S3 (Upload / Download)", stage: 5 },
+      { id: 13, mod: "E", title: "Test 13: Vector DB & Semantic Search", stage: 6 },
+      { id: 14, mod: "E", title: "Test 14: Knowledge Graph Database", stage: 6 },
+    ];
+
+    window.switchTestTab = (idx) => {
+      idx = Math.max(1, Math.min(14, idx));
+      currentActiveTab = idx;
+
+      for (let i = 1; i <= 14; i++) {
+        const btn = document.getElementById(`tabBtn${i}`);
+        const card = document.getElementById(`tc${i}`);
+        if (btn) btn.classList.toggle("active", i === idx);
+        if (card) card.classList.toggle("active-tab", i === idx);
+      }
+
+      const meta = TEST_METADATA[idx - 1];
+      const banner = document.getElementById("activeTabBanner");
+      if (banner && meta) {
+        banner.textContent = `Test ${meta.id} of 14 • Module ${meta.mod}: ${meta.title}`;
+      }
+      const runBtn = document.getElementById("runActiveTabBtn");
+      if (runBtn && meta) {
+        runBtn.textContent = `▶️ Run Test ${meta.id}`;
+      }
+
+      if (meta && meta.stage !== undefined) {
+        activeHighlightStage = meta.stage;
+      }
+    };
+
+    window.navigateTestTab = (dir) => {
+      let next = currentActiveTab + dir;
+      if (next < 1) next = 14;
+      if (next > 14) next = 1;
+      window.switchTestTab(next);
+      const activeBtn = document.getElementById(`tabBtn${next}`);
+      if (activeBtn) activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
+    };
+
+    window.runCurrentTabTest = () => {
+      if (currentActiveTab === 12) {
+        window.runS3Upload();
+      } else {
+        window.runTest(currentActiveTab);
+      }
+    };
+
+    window.filterModuleTabs = (mod) => {
+      const mods = ["ALL", "A", "B", "C", "D", "E"];
+      mods.forEach(m => {
+        const p = document.getElementById(`filterMod${m}`);
+        if (p) p.classList.toggle("active", m === mod);
+      });
+
+      let firstVisibleIdx = null;
+      for (let i = 1; i <= 14; i++) {
+        const btn = document.getElementById(`tabBtn${i}`);
+        if (btn) {
+          const btnMod = btn.getAttribute("data-mod");
+          const isVisible = (mod === "ALL" || btnMod === mod);
+          btn.style.display = isVisible ? "inline-flex" : "none";
+          if (isVisible && firstVisibleIdx === null) {
+            firstVisibleIdx = i;
+          }
+        }
+      }
+
+      const currentBtn = document.getElementById(`tabBtn${currentActiveTab}`);
+      if (currentBtn && currentBtn.style.display === "none" && firstVisibleIdx !== null) {
+        window.switchTestTab(firstVisibleIdx);
+      }
+    };
 
     const logLines = [
       "[INIT] GitHub Actions & GitHub <-> AWS Bridge Test Lab initialized.",
@@ -1118,6 +1348,10 @@
       }
       const resEl = document.getElementById(`res${idx}`);
       if (resEl) resEl.innerHTML = resultText;
+      const tabBadge = document.getElementById(`tabBadge${idx}`);
+      if (tabBadge) tabBadge.textContent = "✅";
+      const tabBtn = document.getElementById(`tabBtn${idx}`);
+      if (tabBtn) tabBtn.classList.add("passed");
       document.getElementById("scoreCounterBadge").textContent = `Tests Passed: ${passedTests.size} / 14`;
       document.getElementById("aiExplanationBox").innerHTML = explanationHtml;
     }
@@ -1300,11 +1534,14 @@
 
     // Execute any of the individual tests
     window.runTest = async (idx, s3SubAction) => {
+      window.switchTestTab(idx);
       lastTestIndex = idx;
       const isLive = Boolean(ownerPasscode);
       const modeLabel = isLive ? "🔓 OWNER LIVE (Real GitHub Push + Real AWS)" : "🔒 NON-OWNER SIMULATED ($0 Demo)";
       const card = document.getElementById(`tc${idx}`);
       if (card) card.classList.add("running");
+      const tabBadge = document.getElementById(`tabBadge${idx}`);
+      if (tabBadge && !passedTests.has(idx)) tabBadge.textContent = "⏳";
 
       document.getElementById("activeFlowLabel").textContent = `RUNNING TEST #${idx} • ${isLive ? 'LIVE MODE' : 'SIMULATED MODE'}`;
 
@@ -2039,6 +2276,7 @@
     };
 
     syncOwnerUi();
+    window.switchTestTab(1);
     appendLog("Ready. Click any of the 14 Test buttons across Modules A, B, C, D, E or 'Run All 14 Tests End-to-End'.");
   </script>
 </body>
