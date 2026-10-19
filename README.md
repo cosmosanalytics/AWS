@@ -6,7 +6,7 @@
 [![AWS Step Functions](https://img.shields.io/badge/AWS%20Step%20Functions-State%20Machine-pink)](https://aws.amazon.com/step-functions/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-An interactive, browser-native 3-tier fractal studio modeling an autonomous CI/CD delivery pipeline from **Worker AI Cognition** to **GitHub Actions DevSecOps (S&OP)** to **AWS Production Cloud (Company)** with the complete 20-page **Human Intervention UI (HUI)**.
+An interactive, browser-native 3-tier fractal studio modeling an autonomous CI/CD delivery pipeline from **Worker AI Cognition** to **GitHub Actions DevSecOps** to **AWS Production Cloud** with the complete 20-page **Human Intervention UI (HUI)**.
 
 👉 **Live Interactive Canvas**: [https://cosmosanalytics.github.io/AWS/](https://cosmosanalytics.github.io/AWS/)
 
@@ -16,7 +16,7 @@ An interactive, browser-native 3-tier fractal studio modeling an autonomous CI/C
 
 ```mermaid
 flowchart TD
-  subgraph L3["☁️ Level 3: AWS Production Cloud (Company Equivalent)"]
+  subgraph L3["☁️ Level 3: AWS Production Cloud (Autonomous Cloud Production)"]
     subgraph Row1["1. Production Ingress & Compute"]
       aws_edge["Route 53 DNS & CloudFront CDN"] --> aws_alb["Application Load Balancer (ALB)"]
       aws_alb --> aws_ecs["Amazon ECS Fargate Cluster"]
@@ -36,7 +36,7 @@ flowchart TD
     end
   end
 
-  subgraph L2["🐙 Level 2: GitHub CI/CD Pipeline (S&OP Equivalent)"]
+  subgraph L2["🐙 Level 2: GitHub CI/CD Pipeline (Continuous Delivery & Verification)"]
     gh_pr["Pull Request #42 Gate"] --> gh_review["AI Code Review Agent"]
     gh_review --> gh_sec["CodeQL & Trivy Security Scan"]
     gh_sec --> gh_ci["Automated CI Test Matrix (48/48)"]
