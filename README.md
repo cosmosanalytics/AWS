@@ -74,17 +74,17 @@ flowchart TD
 
 ---
 
-## 📊 The Autonomous Odyssey: From Single Agent to Ambient AI Enterprise
+## 📊 The Autonomous Odyssey: From Single Agent to Ambient AI
 
 The repository includes the widescreen executive presentation: [**`AI_Journey_Single_Agent_to_Ambient_Enterprise.pptx`**](./AI_Journey_Single_Agent_to_Ambient_Enterprise.pptx) ([Script](./scripts/generate_ai_journey_presentation.py)).
 
-### The 6 Evolutionary Eras:
+### The Evolutionary Eras:
 1. **Single Agent**: The Lone Wolf generalist prompt struggling with context drift.
 2. **Multi-Agent Squad**: Division of labor across specialized personas (Coder, Tester, Security Guard).
-3. **3-Layer Cognitive Brain**: L1 fast reflex filter (WebGPU), L2 deep deliberative reasoning (Claude Sonnet), and L3 meta-executive control.
+3. **3-Layer Cognitive Brain**: L1 fast reflex filter, L2 deep deliberative reasoning (Claude Sonnet), and L3 meta-executive control.
 4. **AI Factory Assembly Line**: Deterministic DevSecOps pipelines with 48/48 CI matrix tests, AST linting, and KMS-encrypted S3 artifact stores.
-5. **S&OP Corporate Organization**: Enterprise governance matching demand forecasting AI to operations state machines (AWS Step Functions in `us-east-2`).
-6. **Ambient AI**: Frictionless background autonomy powered by Context DAGs, skill packaging, one-button reversibility, and dynamic multi-routing.
+5. **Ambient AI**: Frictionless background autonomy powered by Context DAGs, skill packaging, one-button reversibility, and dynamic multi-routing.
+6. **Zero Mental Load**: Ambient ergonomics transforming human operators from stressed micromanagers into confident directors (-88% cognitive burden).
 
 ![AI Journey Roadmap](./presentation_assets/diag_roadmap.png)
 ![Brain-Inspired Cognitive System](./presentation_assets/diag_brain.png)
