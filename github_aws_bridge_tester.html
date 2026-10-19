@@ -234,18 +234,18 @@
     border-radius: 5px;
   }
 
-  /* INDEPENDENT TEST TABS NAVIGATION */
+  /* TEST MODULE FILTERS & DROPDOWN MENU NAVIGATION */
   .module-filter-bar {
     display: flex;
-    gap: 4px;
+    gap: 5px;
     flex-wrap: wrap;
-    padding: 6px 0 4px 0;
+    padding: 6px 0 6px 0;
     align-items: center;
   }
   .module-pill {
-    font-size: 10px;
+    font-size: 10.5px;
     font-weight: 700;
-    padding: 3px 9px;
+    padding: 4px 10px;
     border-radius: 20px;
     background: #F1F5F9;
     color: #475569;
@@ -264,69 +264,81 @@
     font-weight: 800;
   }
 
-  .test-tabs-bar {
-    display: flex;
-    gap: 5px;
-    overflow-x: auto;
-    padding: 6px 2px 8px 2px;
-    margin: 4px 0 6px 0;
-    border-bottom: 2px solid #E2E8F0;
-    scrollbar-width: thin;
-  }
-  .test-tab-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 5px;
-    padding: 6px 10px;
-    font-size: 10.5px;
-    font-weight: 700;
-    font-family: var(--font-sans);
-    background: #FFFFFF;
-    color: #334155;
-    border: 1.5px solid #CBD5E1;
-    border-radius: 6px;
-    cursor: pointer;
-    white-space: nowrap;
-    transition: all 0.15s ease;
-  }
-  .test-tab-btn:hover {
-    background: #F0F9FF;
-    border-color: #93C5FD;
-    color: #0369A1;
-  }
-  .test-tab-btn.active {
-    background: #FFFFFF;
-    border-color: var(--accent-blue);
-    color: var(--accent-blue);
-    box-shadow: 0 2px 8px rgba(2, 132, 199, 0.2);
-    font-weight: 800;
-  }
-  .test-tab-btn.passed {
-    border-color: var(--accent-green);
-    color: #047857;
-  }
-  .test-tab-btn.passed.active {
-    background: #F0FDF4;
-    border-color: var(--accent-green);
-    color: #047857;
-  }
-  .tab-badge {
-    font-family: var(--font-mono);
-    font-size: 9.5px;
-    font-weight: 800;
-  }
-
-  .tab-nav-controls {
+  /* TEST SELECTION MENU TOOLBAR */
+  .test-menu-toolbar {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: #F8FAFC;
-    border: 1px solid #E2E8F0;
-    border-radius: 6px;
-    padding: 6px 10px;
+    background: #FFFFFF;
+    border: 1.5px solid #CBD5E1;
+    border-radius: 8px;
+    padding: 8px 12px;
     margin-bottom: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    gap: 8px;
     flex-wrap: wrap;
+  }
+  .test-menu-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+    min-width: 270px;
+  }
+  .test-menu-label {
+    font-size: 11px;
+    font-weight: 800;
+    color: #0F172A;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    white-space: nowrap;
+  }
+  .test-select-wrap {
+    flex: 1;
+    min-width: 220px;
+  }
+  .test-select-dropdown {
+    width: 100%;
+    padding: 7px 10px;
+    font-size: 12px;
+    font-weight: 700;
+    font-family: var(--font-sans);
+    color: #0F172A;
+    background: #F8FAFC;
+    border: 1.5px solid #94A3B8;
+    border-radius: 6px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.15s ease;
+  }
+  .test-select-dropdown:hover {
+    background: #FFFFFF;
+    border-color: var(--accent-blue);
+  }
+  .test-select-dropdown:focus {
+    background: #FFFFFF;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+  }
+  .test-select-dropdown optgroup {
+    font-weight: 800;
+    color: #0369A1;
+    background: #F1F5F9;
+    font-size: 11.5px;
+  }
+  .test-select-dropdown option {
+    font-weight: 600;
+    color: #0F172A;
+    background: #FFFFFF;
+    padding: 4px;
+    font-size: 12px;
+  }
+  .test-menu-right {
+    display: flex;
+    align-items: center;
     gap: 6px;
+    flex-wrap: wrap;
   }
 
   /* INDEPENDENT TEST PANELS */
@@ -540,75 +552,47 @@
         <button type="button" class="module-pill" id="filterModE" onclick="filterModuleTabs('E')">Mod E (S3, Vector, Graph)</button>
       </div>
 
-      <!-- 14 INDEPENDENT TEST TABS -->
-      <div class="test-tabs-bar" id="testTabsBar">
-        <button type="button" class="test-tab-btn active" id="tabBtn1" data-mod="A" onclick="switchTestTab(1)">
-          <span>🚀 Test 1: git push</span>
-          <span class="tab-badge" id="tabBadge1">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn2" data-mod="A" onclick="switchTestTab(2)">
-          <span>🛡️ Test 2: Pull Request</span>
-          <span class="tab-badge" id="tabBadge2">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn3" data-mod="B" onclick="switchTestTab(3)">
-          <span>🤖 Test 3: Job 1 (AST Review)</span>
-          <span class="tab-badge" id="tabBadge3">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn4" data-mod="B" onclick="switchTestTab(4)">
-          <span>🔒 Test 4: Job 2 (Secret Shield)</span>
-          <span class="tab-badge" id="tabBadge4">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn5" data-mod="B" onclick="switchTestTab(5)">
-          <span>✅ Test 5: Job 3 (48/48 CI)</span>
-          <span class="tab-badge" id="tabBadge5">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn6" data-mod="B" onclick="switchTestTab(6)">
-          <span>🛑 Test 6: Job 4 (401 Pre-Flight)</span>
-          <span class="tab-badge" id="tabBadge6">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn7" data-mod="C" onclick="switchTestTab(7)">
-          <span>① Test 7: Push GitHub➔AWS</span>
-          <span class="tab-badge" id="tabBadge7">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn8" data-mod="C" onclick="switchTestTab(8)">
-          <span>② Test 8: Pull GitHub➔AWS</span>
-          <span class="tab-badge" id="tabBadge8">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn9" data-mod="C" onclick="switchTestTab(9)">
-          <span>③ Test 9: Return AWS➔GitHub</span>
-          <span class="tab-badge" id="tabBadge9">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn10" data-mod="D" onclick="switchTestTab(10)">
-          <span>🛡️ Test 10: Cost Shield ($0 vs Live)</span>
-          <span class="tab-badge" id="tabBadge10">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn11" data-mod="D" onclick="switchTestTab(11)">
-          <span>🧠 Test 11: Multi-Engine AI</span>
-          <span class="tab-badge" id="tabBadge11">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn12" data-mod="E" onclick="switchTestTab(12)">
-          <span>🪣 Test 12: Amazon S3 (Up/Down)</span>
-          <span class="tab-badge" id="tabBadge12">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn13" data-mod="E" onclick="switchTestTab(13)">
-          <span>📐 Test 13: Vector DB Search</span>
-          <span class="tab-badge" id="tabBadge13">⚪</span>
-        </button>
-        <button type="button" class="test-tab-btn" id="tabBtn14" data-mod="E" onclick="switchTestTab(14)">
-          <span>🕸️ Test 14: Knowledge Graph</span>
-          <span class="tab-badge" id="tabBadge14">⚪</span>
-        </button>
-      </div>
-
-      <!-- ACTIVE TAB CONTROLS & BREADCRUMB -->
-      <div class="tab-nav-controls">
-        <div style="display:flex; align-items:center; gap:6px;">
-          <button type="button" class="btn btn-secondary" style="font-size:10px; padding:3px 8px;" onclick="navigateTestTab(-1)">⬅️ Prev</button>
-          <button type="button" class="btn btn-secondary" style="font-size:10px; padding:3px 8px;" onclick="navigateTestTab(1)">Next ➡️</button>
-          <span id="activeTabBanner" style="font-size:11px; font-weight:800; color:#0F172A; margin-left:4px;">Test 1 of 14 • Module A: Test 1: git push origin main</span>
+      <!-- TEST SELECTION MENU TOOLBAR -->
+      <div class="test-menu-toolbar">
+        <div class="test-menu-left">
+          <label for="testSelectMenu" class="test-menu-label">
+            <span style="font-size:13px;">🧪</span>
+            <span>TEST MENU:</span>
+          </label>
+          <div class="test-select-wrap">
+            <select id="testSelectMenu" class="test-select-dropdown" onchange="switchTestTab(parseInt(this.value, 10))">
+              <optgroup label="Module A • How Code Enters GitHub (git push vs PR)">
+                <option value="1" data-mod="A">🚀 Test 1: git push origin main (Push File via Lambda)</option>
+                <option value="2" data-mod="A">🛡️ Test 2: Pull Request (Initiate Branch & Review Diff)</option>
+              </optgroup>
+              <optgroup label="Module B • Automated GitHub Actions CI Jobs (ubuntu-latest)">
+                <option value="3" data-mod="B">🤖 Test 3: Action Job 1 (AI AST Review)</option>
+                <option value="4" data-mod="B">🔒 Test 4: Action Job 2 (Secret Shield)</option>
+                <option value="5" data-mod="B">✅ Test 5: Action Job 3 (48/48 CI Matrix)</option>
+                <option value="6" data-mod="B">🛑 Test 6: Action Job 4 (AWS 401 Pre-Flight)</option>
+              </optgroup>
+              <optgroup label="Module C • 2-Way GitHub ➔ AWS Bridge Connections">
+                <option value="7" data-mod="C">① Test 7: Push (GitHub ➔ AWS Forward Trigger)</option>
+                <option value="8" data-mod="C">② Test 8: Pull (GitHub ➔ AWS Repo State Ingestion)</option>
+                <option value="9" data-mod="C">③ Test 9: Return (AWS ➔ GitHub Signed Receipt)</option>
+              </optgroup>
+              <optgroup label="Module D • Dual-Mode Cloud Security & Multi-Model AI Engine">
+                <option value="10" data-mod="D">🛡️ Test 10: Dual-Mode Cost Shield ($0 Demo vs Live AWS)</option>
+                <option value="11" data-mod="D">🧠 Test 11: Multi-Engine AI Dispatch (WebGPU / Groq / Bedrock)</option>
+              </optgroup>
+              <optgroup label="Module E • Cloud Storage & AI Databases (S3, Vector, Graph)">
+                <option value="12" data-mod="E">🪣 Test 12: Amazon S3 (Upload / Download Files)</option>
+                <option value="13" data-mod="E">📐 Test 13: Vector DB & Semantic Search</option>
+                <option value="14" data-mod="E">🕸️ Test 14: Knowledge Graph Database</option>
+              </optgroup>
+            </select>
+          </div>
         </div>
-        <div style="display:flex; align-items:center; gap:6px;">
-          <button type="button" class="btn btn-blue" id="runActiveTabBtn" style="font-size:10.5px; padding:4px 10px; font-weight:800;" onclick="runCurrentTabTest()">▶️ Run Test 1</button>
+
+        <div class="test-menu-right">
+          <button type="button" class="btn btn-secondary" style="font-size:11px; padding:6px 11px; font-weight:700;" onclick="navigateTestTab(-1)" title="Previous Test">⬅️ Prev</button>
+          <button type="button" class="btn btn-secondary" style="font-size:11px; padding:6px 11px; font-weight:700;" onclick="navigateTestTab(1)" title="Next Test">Next ➡️</button>
+          <button type="button" class="btn btn-blue" id="runActiveTabBtn" style="font-size:11px; padding:6px 14px; font-weight:800;" onclick="runCurrentTabTest()">▶️ Run Test 1</button>
         </div>
       </div>
 
@@ -1015,24 +999,34 @@
     ];
 
     window.switchTestTab = (idx) => {
-      idx = Math.max(1, Math.min(14, idx));
+      idx = Math.max(1, Math.min(14, parseInt(idx, 10) || 1));
       currentActiveTab = idx;
 
+      // Sync select menu dropdown value
+      const sel = document.getElementById("testSelectMenu");
+      if (sel && sel.value !== String(idx)) {
+        sel.value = String(idx);
+      }
+
+      // Show selected card, hide others
       for (let i = 1; i <= 14; i++) {
-        const btn = document.getElementById(`tabBtn${i}`);
         const card = document.getElementById(`tc${i}`);
-        if (btn) btn.classList.toggle("active", i === idx);
         if (card) card.classList.toggle("active-tab", i === idx);
       }
 
       const meta = TEST_METADATA[idx - 1];
-      const banner = document.getElementById("activeTabBanner");
-      if (banner && meta) {
-        banner.textContent = `Test ${meta.id} of 14 • Module ${meta.mod}: ${meta.title}`;
-      }
       const runBtn = document.getElementById("runActiveTabBtn");
       if (runBtn && meta) {
         runBtn.textContent = `▶️ Run Test ${meta.id}`;
+      }
+
+      // Sync module filter pill with current test
+      if (meta) {
+        const mods = ["ALL", "A", "B", "C", "D", "E"];
+        mods.forEach(m => {
+          const p = document.getElementById(`filterMod${m}`);
+          if (p) p.classList.toggle("active", m === meta.mod);
+        });
       }
 
       if (meta && meta.stage !== undefined) {
@@ -1045,8 +1039,6 @@
       if (next < 1) next = 14;
       if (next > 14) next = 1;
       window.switchTestTab(next);
-      const activeBtn = document.getElementById(`tabBtn${next}`);
-      if (activeBtn) activeBtn.scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
     };
 
     window.runCurrentTabTest = () => {
@@ -1064,23 +1056,20 @@
         if (p) p.classList.toggle("active", m === mod);
       });
 
-      let firstVisibleIdx = null;
-      for (let i = 1; i <= 14; i++) {
-        const btn = document.getElementById(`tabBtn${i}`);
-        if (btn) {
-          const btnMod = btn.getAttribute("data-mod");
-          const isVisible = (mod === "ALL" || btnMod === mod);
-          btn.style.display = isVisible ? "inline-flex" : "none";
-          if (isVisible && firstVisibleIdx === null) {
-            firstVisibleIdx = i;
-          }
-        }
+      const sel = document.getElementById("testSelectMenu");
+      if (sel) {
+        const options = sel.querySelectorAll("option");
+        options.forEach(opt => {
+          const optMod = opt.getAttribute("data-mod");
+          const visible = (mod === "ALL" || optMod === mod);
+          opt.hidden = !visible;
+          opt.disabled = !visible;
+        });
       }
 
-      const currentBtn = document.getElementById(`tabBtn${currentActiveTab}`);
-      if (currentBtn && currentBtn.style.display === "none" && firstVisibleIdx !== null) {
-        window.switchTestTab(firstVisibleIdx);
-      }
+      const moduleFirstTest = { "ALL": 1, "A": 1, "B": 3, "C": 7, "D": 10, "E": 12 };
+      const targetIdx = moduleFirstTest[mod] || 1;
+      window.switchTestTab(targetIdx);
     };
 
     const logLines = [
@@ -1348,10 +1337,15 @@
       }
       const resEl = document.getElementById(`res${idx}`);
       if (resEl) resEl.innerHTML = resultText;
-      const tabBadge = document.getElementById(`tabBadge${idx}`);
-      if (tabBadge) tabBadge.textContent = "✅";
-      const tabBtn = document.getElementById(`tabBtn${idx}`);
-      if (tabBtn) tabBtn.classList.add("passed");
+
+      const sel = document.getElementById("testSelectMenu");
+      if (sel) {
+        const opt = sel.querySelector(`option[value="${idx}"]`);
+        if (opt && !opt.textContent.startsWith("✅")) {
+          opt.textContent = "✅ " + opt.textContent.replace(/^⏳\s*/, "");
+        }
+      }
+
       document.getElementById("scoreCounterBadge").textContent = `Tests Passed: ${passedTests.size} / 14`;
       document.getElementById("aiExplanationBox").innerHTML = explanationHtml;
     }
@@ -1540,8 +1534,14 @@
       const modeLabel = isLive ? "🔓 OWNER LIVE (Real GitHub Push + Real AWS)" : "🔒 NON-OWNER SIMULATED ($0 Demo)";
       const card = document.getElementById(`tc${idx}`);
       if (card) card.classList.add("running");
-      const tabBadge = document.getElementById(`tabBadge${idx}`);
-      if (tabBadge && !passedTests.has(idx)) tabBadge.textContent = "⏳";
+
+      const sel = document.getElementById("testSelectMenu");
+      if (sel && !passedTests.has(idx)) {
+        const opt = sel.querySelector(`option[value="${idx}"]`);
+        if (opt && !opt.textContent.startsWith("⏳") && !opt.textContent.startsWith("✅")) {
+          opt.textContent = "⏳ " + opt.textContent;
+        }
+      }
 
       document.getElementById("activeFlowLabel").textContent = `RUNNING TEST #${idx} • ${isLive ? 'LIVE MODE' : 'SIMULATED MODE'}`;
 
