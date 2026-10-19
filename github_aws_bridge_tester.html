@@ -700,15 +700,27 @@
           </div>
           <div class="tc-desc">Upload or download files directly to/from Amazon S3 (<code>us-east-2</code>):</div>
           <div style="display:flex; gap:6px; flex-wrap:wrap; margin:2px 0;">
-            <input type="text" id="s3KeyInput" value="deployments/test-artifact.json" placeholder="S3 Key (e.g. uploads/my-file.txt)" style="flex:1; min-width:130px; font-size:10px; padding:4px 6px;">
+            <input type="text" id="s3KeyInput" list="s3KeysDatalist" value="deployments/test-artifact.json" placeholder="S3 Key (e.g. uploads/my-file.txt)" style="flex:1; min-width:130px; font-size:10px; padding:4px 6px;">
             <input type="text" id="s3BucketInput" value="cosmos-ai-factory-cicd-966273137102" placeholder="S3 Bucket" style="width:130px; font-size:10px; padding:4px 6px;">
           </div>
-          <div style="display:flex; gap:6px; align-items:center; margin:2px 0;">
+          <datalist id="s3KeysDatalist">
+            <option value="deployments/test-artifact.json">
+            <option value="configs/pipeline-spec.yaml">
+            <option value="deployments/exec-latest.json">
+            <option value="models/weights-manifest.json">
+          </datalist>
+          <div style="display:flex; gap:6px; flex-wrap:wrap; align-items:center; margin:2px 0;">
             <label class="btn btn-secondary" style="font-size:9.5px; padding:2px 6px; cursor:pointer; margin:0; display:inline-flex; align-items:center; gap:4px;">
               <input type="file" id="s3LocalFileInput" style="display:none;" onchange="onPickS3File(this)">
               📎 Pick File to Upload
             </label>
-            <span style="font-size:9.5px; color:var(--text-muted);">or edit file content / payload below:</span>
+            <select id="s3DownloadKeySelect" onchange="onSelectS3DownloadFile(this)" style="font-size:9.5px; padding:2px 6px; flex:1; min-width:145px; background:#FFFFFF; border:1px solid var(--border-color); border-radius:4px; color:var(--text-primary); cursor:pointer;">
+              <option value="">📂 Pick S3 File to Download ▾</option>
+              <option value="deployments/test-artifact.json">📄 deployments/test-artifact.json</option>
+              <option value="configs/pipeline-spec.yaml">⚙️ configs/pipeline-spec.yaml</option>
+              <option value="deployments/exec-latest.json">📊 deployments/exec-latest.json</option>
+              <option value="models/weights-manifest.json">🧠 models/weights-manifest.json</option>
+            </select>
           </div>
           <div id="s3FilePill" style="display:none; font-size:9.5px; color:var(--accent-green); font-weight:700; margin-bottom:2px;"></div>
           <textarea id="s3ContentInput" rows="2" style="width:100%; font-size:10px; padding:4px 6px; margin-bottom:2px; font-family:var(--font-mono); resize:vertical;" placeholder="Payload content to upload or downloaded file content...">{"system":"Cosmos AI Factory","event":"S3 Verification","status":"active"}</textarea>
@@ -1188,7 +1200,9 @@
     window.onPickS3File = (inputEl) => {
       const f = inputEl.files && inputEl.files[0];
       if (!f) return;
-      document.getElementById("s3KeyInput").value = "uploads/" + f.name;
+      const targetKey = "uploads/" + f.name;
+      document.getElementById("s3KeyInput").value = targetKey;
+      registerS3KeyInPicker(targetKey);
       const isImgOrBin = !(/\.(md|txt|csv|tsv|json|yaml|yml|html|css|js|py|sh|sql)$/i.test(f.name));
       const pill = document.getElementById("s3FilePill");
       if (pill) {
@@ -1199,7 +1213,7 @@
       reader.onload = (e) => {
         const val = String(e.target.result || "");
         document.getElementById("s3ContentInput").value = val;
-        appendLog(`[S3 FILE LOADED] Ready to upload "${f.name}" (${f.size.toLocaleString()} bytes) to Amazon S3 key "uploads/${f.name}".`);
+        appendLog(`[S3 FILE LOADED] Ready to upload "${f.name}" (${f.size.toLocaleString()} bytes) to Amazon S3 key "${targetKey}".`);
       };
       if (isImgOrBin) {
         reader.readAsDataURL(f);
@@ -1208,6 +1222,45 @@
       }
       inputEl.value = "";
     };
+
+    window.onSelectS3DownloadFile = (sel) => {
+      const val = sel.value;
+      if (!val) return;
+      document.getElementById("s3KeyInput").value = val;
+      if (document.getElementById("lblS3Key")) document.getElementById("lblS3Key").textContent = val;
+      if (s3Store[val]) {
+        document.getElementById("s3ContentInput").value = s3Store[val].content;
+        const pill = document.getElementById("s3FilePill");
+        if (pill) {
+          pill.style.display = "block";
+          pill.textContent = `📂 Picked for Download: "${val}" (${(s3Store[val].size / 1024).toFixed(1)} KB) • Click "⬇️ Download" or "💾 Save File"`;
+        }
+      }
+      appendLog(`[S3 FILE PICKED] Selected "${val}" for S3 download.`);
+    };
+
+    function registerS3KeyInPicker(key) {
+      const sel = document.getElementById("s3DownloadKeySelect");
+      const dl = document.getElementById("s3KeysDatalist");
+      if (sel) {
+        let exists = Array.from(sel.options).some(opt => opt.value === key);
+        if (!exists) {
+          const opt = document.createElement("option");
+          opt.value = key;
+          opt.textContent = `📦 ${key} (Ready to Download)`;
+          sel.appendChild(opt);
+        }
+        sel.value = key;
+      }
+      if (dl) {
+        let exists = Array.from(dl.options).some(opt => opt.value === key);
+        if (!exists) {
+          const opt = document.createElement("option");
+          opt.value = key;
+          dl.appendChild(opt);
+        }
+      }
+    }
 
     window.saveS3FileToDisk = () => {
       const s3Key = (document.getElementById("s3KeyInput")?.value || "downloaded-file.txt").trim();
@@ -1695,6 +1748,7 @@
             contentType: s3Key.endsWith(".json") ? "application/json" : (s3Key.endsWith(".yaml") || s3Key.endsWith(".yml") ? "text/yaml" : "text/plain"),
             uploadedAt: uploadTs
           };
+          registerS3KeyInPicker(s3Key);
 
           if (isLive) {
             appendLog(`[TEST 12 LIVE] Uploading ${payloadBytes} bytes to s3://${s3Bucket}/${s3Key} via AWS Lambda in us-east-2...`);
